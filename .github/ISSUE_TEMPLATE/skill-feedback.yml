@@ -1,0 +1,79 @@
+name: Skill feedback
+description: Report wrong, stale, or missing guidance in the CKEditor skill (usually filed by an AI agent).
+title: "[skill] "
+labels: ["skill-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for improving the CKEditor skill. Please keep it concrete so it's actionable.
+
+        For **CKEditor product bugs** use `ckeditor/ckeditor5` (or the relevant integration repo);
+        for **account / license / billing** use the [Customer Portal](https://portal.ckeditor.com/) and support — not this repo.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What went wrong?
+      options:
+        - Guidance was wrong / contradicted what worked
+        - Guidance was stale (no longer matches the current editor)
+        - Something was missing (path / framework / gotcha not covered)
+        - Found a fix the docs don't explain
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Installation method
+      options:
+        - npm / bundler
+        - CDN / cloud
+        - ZIP / self-hosted
+        - Not sure
+    validations:
+      required: false
+  - type: input
+    id: framework
+    attributes:
+      label: Framework & version
+      placeholder: "e.g. Next.js 15 (App Router) / vanilla / React 19 / Angular 18"
+    validations:
+      required: false
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Free or premium?
+      options:
+        - Free (GPL)
+        - Premium / trial
+        - Not sure
+    validations:
+      required: false
+  - type: textarea
+    id: expected-vs-actual
+    attributes:
+      label: What the skill said vs. what actually happened
+      description: Paste the exact error code/message if there was one (e.g. `ckeditor-duplicated-modules`).
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: The fix or workaround you found (if any)
+    validations:
+      required: false
+  - type: input
+    id: editor-version
+    attributes:
+      label: CKEditor version
+      placeholder: "e.g. 44.1.0 / latest / LTS v47"
+    validations:
+      required: false
+  - type: input
+    id: agent
+    attributes:
+      label: Agent / tool
+      placeholder: "e.g. Claude Code, Cursor, Codex"
+    validations:
+      required: false

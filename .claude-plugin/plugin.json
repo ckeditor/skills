@@ -1,0 +1,33 @@
+{
+  "name": "ckeditor",
+  "description": "Install, configure, and integrate CKEditor 5 (free and premium) in any JavaScript project.",
+  "version": "0.1.0",
+  "author": {
+    "name": "CKEditor (CKSource)",
+    "url": "https://ckeditor.com"
+  },
+  "homepage": "https://github.com/ckeditor/skills",
+  "license": "MIT",
+  "keywords": [
+    "ckeditor",
+    "ckeditor5",
+    "editor",
+    "wysiwyg",
+    "wysiwyg-editor",
+    "rich-text-editor",
+    "rich-text",
+    "html-editor",
+    "text-editor",
+    "content-editor",
+    "document-editor",
+    "word-processor",
+    "markdown-editor",
+    "contenteditable",
+    "react-editor",
+    "vue-editor",
+    "angular-editor",
+    "collaborative-editor",
+    "track-changes",
+    "ai-writing-assistant"
+  ]
+}
