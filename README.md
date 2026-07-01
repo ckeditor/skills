@@ -1,6 +1,6 @@
 # CKEditor skills
 
-Official **[Agent Skills](https://code.claude.com/docs/en/skills)** for working
+Official **[Agent Skills](https://agentskills.io/home)** for working
 with CKEditor, designed to be portable across AI coding agents (Claude Code,
 Cursor, Codex, and any tool that supports the open skill format).
 
