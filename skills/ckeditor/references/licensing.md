@@ -6,6 +6,8 @@
 ## Free / open-source (GPL)
 
 - Set `licenseKey: 'GPL'`.
+- **Self-hosted (npm/ZIP) only** — the CDN never accepts `'GPL'`. For CDN use a
+  commercial key (a free plan with monthly load limits exists in the portal).
 - Use **only** the `ckeditor5` package and its free features.
 - A **"Powered by CKEditor"** logo appears in the editor. It can be removed only
   with a commercial license.
@@ -14,9 +16,9 @@
 
 - A commercial license key removes the logo and/or unlocks premium features.
 - Get keys from the **Customer Portal**: <https://portal.ckeditor.com/>.
-- **Match the key to the distribution channel** — a key may be scoped to
-  self-hosted vs cloud/CDN use. A channel mismatch shows up as a license error in
-  the console.
+- **Match the key to the distribution channel** — every key is scoped to
+  self-hosted (npm/ZIP) vs cloud/CDN use, and `'GPL'` is self-hosted only. A
+  mismatch throws `license-key-invalid-distribution-channel` in the console.
 - Development-domain / localhost allowances and key types vary — check the
   current docs: `…/getting-started/licensing/license-key-and-activation`.
 

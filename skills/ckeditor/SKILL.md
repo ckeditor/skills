@@ -175,8 +175,8 @@ A live, rendering editor with a clean console = success.
 ## Critical rules
 
 - **License key is required.** Set `licenseKey` to `'GPL'` (open-source) or a
-  commercial key. Match the key to the channel (self-hosted vs cloud/CDN).
-  Omitting it is an error on current versions.
+  commercial key. `'GPL'` works **only self-hosted** (npm/ZIP) — the CDN always
+  needs a commercial key. Omitting the key is an error on current versions.
 - **One version, one package set.** `ckeditor5` and `ckeditor5-premium-features`
   must be the **exact same version**; never mix in old scoped `@ckeditor/*`
   packages. Duplicate/mismatched copies → `ckeditor-duplicated-modules`.
