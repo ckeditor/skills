@@ -11,10 +11,21 @@ a different task, so pick by the task at hand:
 | Source | Sweet spot |
 |---|---|
 | **Kapa MCP** | Natural-language, RAG-based research across *all* the docs. Best when you don't yet know where the answer lives. |
-| **Docs site (direct)** | Targeted reading of a known page. The source material, so **highest confidence** — and the only source with the full **API reference**. |
+| **Docs site (direct)** | Targeted reading of a known page — **fetch it as markdown** (swap `.html` → `.md`, see below). The source material, so **highest confidence** — and the only source with the full **API reference**. |
 | **`llms-full.txt`** | The guides in one file: fewest roundtrips, but a large token cost. **Guides/feature guides only — no API reference.** |
 | **TypeScript types (npm)** | API documentation as JSDoc, readable **offline** from `node_modules`; fastest for a quick class/method/config signature check. |
 | **`llms.txt`** | Product overview (capabilities, lineup, pricing). Not docs. |
+
+## Docs pages as markdown (`.md`)
+
+Every **latest** docs-site page — guides and the API reference alike — is also
+served as clean markdown: replace `.html` with `.md` in the URL (for example
+`…/setup/editor-types.md`). **Always prefer the `.md` variant when fetching a
+docs page**: same content, a fraction of the tokens, no HTML noise. Its links
+are relative `.md` links, so the docs can be followed page-to-page in markdown.
+
+Latest only: versioned docs (LTS `…/lts-v47/…`, pinned `…/42.0.0/…`) return 404
+for `.md` — fetch those as regular `.html` pages.
 
 ## Version routing
 
@@ -39,10 +50,21 @@ docs-grounded work markedly more effective and, because it queries live docs,
 reinforces version-agnosticism. Use it to find the right guide/API page from a
 natural-language question, or to verify how a feature/config is supposed to work.
 
-- **Endpoint:** `https://ckeditor5.mcp.kapa.ai/`
-- **Auth:** Google SSO
+If it isn't connected, **suggest setting it up** to the user — it's the single
+best upgrade to this skill's effectiveness.
 
-**Turn it on — Claude Code** (`.mcp.json` or settings):
+- **Endpoint:** `https://ckeditor5.mcp.kapa.ai/`
+- **Auth:** Google or GitHub SSO. On first use the server asks to authenticate:
+  a browser window opens — sign in, then retry the query. (Claude Code: run
+  `/mcp` → pick `ckeditor5` → Authenticate, if no prompt appears.)
+
+**Turn it on — Claude Code** (one-liner):
+
+```bash
+claude mcp add --transport http --scope project ckeditor5 https://ckeditor5.mcp.kapa.ai
+```
+
+Or manually (`.mcp.json` or settings):
 
 ```json
 {
@@ -65,6 +87,8 @@ startup_timeout_sec = 20
 tool_timeout_sec = 60
 enabled = true
 ```
+
+Setup for other agents (Cursor, Windsurf, …): see the [AI coding agents guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/ai-coding-agents.html).
 
 **Pitfall — prefer a sub-agent.** Kapa can return large doc chunks that flood the
 context and inflate token use; query it **through a sub-agent** that returns only
