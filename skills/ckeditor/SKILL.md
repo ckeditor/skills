@@ -185,6 +185,9 @@ A live, rendering editor with a clean console = success.
 - **Import the CSS and add `.ck-content`** on output containers.
 - **Premium needs both** the `ckeditor5-premium-features` import and a valid
   commercial key.
+- **Spot deprecations before integrating.** Live docs flag deprecated features
+  with an explicit deprecation notice and name a successor if one exists. If the requested feature is deprecated, **stop**, tell
+  the user about it and the successor feature, and let them decide how to proceed.
 - **Don't** use predefined / Online-Builder-ZIP / DLL builds; **don't**
   deep-import from `@ckeditor/ckeditor5-*/src/...`; **don't** hand-configure
   webpack raw-loaders / PostCSS for CKEditor; **don't** hand-write `.d.ts` shims
