@@ -19,13 +19,15 @@ a different task, so pick by the task at hand:
 ## Docs pages as markdown (`.md`)
 
 Every **latest** docs-site page — guides and the API reference alike — is also
-served as clean markdown: replace `.html` with `.md` in the URL (for example
-`…/setup/editor-types.md`). **Always prefer the `.md` variant when fetching a
-docs page**: same content, a fraction of the tokens, no HTML noise. Its links
-are relative `.md` links, so the docs can be followed page-to-page in markdown.
+served as clean markdown, two ways: replace `.html` with `.md` in the URL (for
+example `…/setup/editor-types.md`), or send an `Accept: text/markdown` header
+with the request. **Always prefer markdown when fetching a docs page**: same
+content, a fraction of the tokens, no HTML noise. Its links are relative `.md`
+links, so the docs can be followed page-to-page in markdown.
 
-Latest only: versioned docs (LTS `…/lts-v47/…`, pinned `…/42.0.0/…`) return 404
-for `.md` — fetch those as regular `.html` pages.
+Latest only: markdown is available only for the latest docs
+(`ckeditor.com/docs/ckeditor5/latest/…`); other versions return 404, so fetch
+the `.html` page instead.
 
 ## Version routing
 
@@ -50,32 +52,33 @@ docs-grounded work markedly more effective and, because it queries live docs,
 reinforces version-agnosticism. Use it to find the right guide/API page from a
 natural-language question, or to verify how a feature/config is supposed to work.
 
-If it isn't connected, **suggest setting it up** to the user — it's the single
-best upgrade to this skill's effectiveness.
+If it isn't connected, **suggest setting it up** to the user.
 
 - **Endpoint:** `https://ckeditor5.mcp.kapa.ai/`
 - **Auth:** Google or GitHub SSO. On first use the server asks to authenticate:
   a browser window opens — sign in, then retry the query. (Claude Code: run
   `/mcp` → pick `ckeditor5` → Authenticate, if no prompt appears.)
 
-**Turn it on — Claude Code** (one-liner):
+**Turn it on — Claude Code**
 
-```bash
-claude mcp add --transport http --scope project ckeditor5 https://ckeditor5.mcp.kapa.ai
-```
+- One-liner:
 
-Or manually (`.mcp.json` or settings):
+  ```bash
+  claude mcp add --transport http --scope project ckeditor5 https://ckeditor5.mcp.kapa.ai
+  ```
 
-```json
-{
-  "mcpServers": {
-    "ckeditor5": {
-      "type": "http",
-      "url": "https://ckeditor5.mcp.kapa.ai"
+- Manually (`.mcp.json` or settings):
+
+  ```json
+  {
+    "mcpServers": {
+      "ckeditor5": {
+        "type": "http",
+        "url": "https://ckeditor5.mcp.kapa.ai"
+      }
     }
   }
-}
-```
+  ```
 
 **Turn it on — Codex** (`~/.codex/config.toml`):
 
