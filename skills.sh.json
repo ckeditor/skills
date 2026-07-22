@@ -1,0 +1,13 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "integration",
+      "description": "Install, configure, and integrate a rich text editor into any JavaScript project.",
+      "skills": [
+        "ckeditor"
+      ]
+    }
+  ]
+}

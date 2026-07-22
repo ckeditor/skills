@@ -70,8 +70,8 @@ Best for plain HTML pages or projects without a bundler. Two shapes:
 
 Look up the current version string and exact helper signature in the docs.
 
-> **License-key channel matters:** a cloud/CDN distribution may need a key issued
-> for cloud use. See `licensing.md`.
+> **License-key channel matters:** the CDN does **not** accept `licenseKey: 'GPL'`
+> — cloud/CDN always needs a commercial key (a free plan exists). See `licensing.md`.
 
 ### ZIP / self-hosted (locked-down or offline)
 
