@@ -4,7 +4,7 @@
   "groupings": [
     {
       "title": "integration",
-      "description": "Install, configure, and integrate the editor in any JavaScript project.",
+      "description": "Install, configure, and integrate a rich text editor into any JavaScript project.",
       "skills": [
         "ckeditor"
       ]
