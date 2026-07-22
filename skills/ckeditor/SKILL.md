@@ -1,20 +1,13 @@
 ---
 name: ckeditor
 description: >-
-  Install, set up, configure, or integrate CKEditor 5 — the rich-text / WYSIWYG
-  editor — in any JavaScript project. Covers the `ckeditor5` and
-  `ckeditor5-premium-features` npm packages, the CKEditor CDN/cloud build, and
-  ZIP/self-hosted builds, in vanilla JS or any framework (React, Vue, Angular,
-  Next.js, Nuxt, Svelte, Astro, plain HTML). Use when adding an editor, wiring
-  the editor component, choosing an install method, configuring plugins /
-  toolbar / menu bar / editor type (classic, inline, balloon, decoupled,
-  multi-root), loading editor CSS, setting the license key (`GPL` or commercial),
-  starting a free trial, or unlocking premium features (collaboration, comments,
-  track changes, revision history, CKEditor AI, import/export to Word/PDF,
-  pagination, CKBox). Also for fixing setup errors: duplicated modules,
-  missing/broken styles, license-key errors, or SSR `window is not defined`. NOT
-  for authoring custom plugins, upgrading versions, fixing breaking changes, or
-  CKEditor 4.
+  Install, set up, configure, or troubleshoot CKEditor 5 — the rich text
+  editor / WYSIWYG editor — in any JavaScript project, vanilla or with a
+  framework (React, Vue, Angular, Next.js, …). Covers install method (npm,
+  CDN, ZIP), wiring the editor component, editor type, configuring plugins /
+  toolbar / menu bar, loading editor CSS, license keys, free and premium
+  features, starting a free trial, and setup errors. NOT for authoring custom
+  plugins, upgrading versions, or CKEditor 4.
 license: MIT
 allowed-tools:
   - Read
