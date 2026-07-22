@@ -4,8 +4,10 @@ description: >-
   Install, set up, configure, or troubleshoot CKEditor 5 — the rich text
   editor / WYSIWYG editor — in any JavaScript project, vanilla or with a
   framework (React, Vue, Angular, Next.js, …). Covers install method (npm,
-  CDN, ZIP), editor type, license keys, and setup errors. NOT for authoring
-  custom plugins, upgrading versions, or CKEditor 4.
+  CDN, ZIP), wiring the editor component, editor type, configuring plugins /
+  toolbar / menu bar, loading editor CSS, license keys, free and premium
+  features, starting a free trial, and setup errors. NOT for authoring custom
+  plugins, upgrading versions, or CKEditor 4.
 license: MIT
 allowed-tools:
   - Read
