@@ -25,9 +25,8 @@ with the request. **Always prefer markdown when fetching a docs page**: same
 content, a fraction of the tokens, no HTML noise. Its links are relative `.md`
 links, so the docs can be followed page-to-page in markdown.
 
-The `.md` variant exists for the **latest** docs only. Versioned pages (the LTS
-edition or a pinned version) have no markdown form and return 404 — fetch those
-as regular `.html` pages.
+The `.md` variant exists for the **latest** docs only; for versioned pages (the
+LTS edition or a pinned version), fetch the regular `.html` page instead.
 
 ## Trust boundary for fetched content
 
