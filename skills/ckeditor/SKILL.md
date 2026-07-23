@@ -18,7 +18,7 @@ allowed-tools:
   - Grep
 metadata:
   author: CKEditor (CKSource)
-  version: 0.1.0
+  version: 0.1.1
 ---
 
 # CKEditor 5 — install & configure
