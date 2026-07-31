@@ -97,8 +97,6 @@ pnpm release:publish-packages
 The script asks for the GitHub token, pushes `main` and the new tag, and creates the GitHub release page with the
 changelog section as its description. The printed release page URL is the last thing to verify.
 
-Nothing is published to npm — the package is private, and the skills are consumed straight from the repository.
-
 ### If something goes wrong
 
 The steps are safe to re-run: the tag is only created when it does not exist yet, and the release page is only
