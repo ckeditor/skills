@@ -76,7 +76,7 @@ correct the wording. Amend the commit if needed.
 
 Add `--dry-run` to print the section without touching any file, and `--date=YYYY-MM-DD` to override the release date.
 
-### 2. Prepare the release commit
+### Prepare the release commit
 
 ```bash
 pnpm release:prepare-packages
