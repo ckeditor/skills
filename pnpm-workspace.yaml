@@ -1,0 +1,5 @@
+# Our own packages are trusted, so they do not have to wait out the `minimumReleaseAge` delay.
+minimumReleaseAge: 4320 # 3 days
+minimumReleaseAgeExclude:
+  - '@ckeditor/*'
+  - '@cksource/*'

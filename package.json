@@ -1,0 +1,34 @@
+{
+  "name": "@ckeditor/skills",
+  "version": "0.1.1",
+  "description": "Official Agent Skills for working with CKEditor.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.11.0",
+    "pnpm": "^11.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ckeditor/skills.git"
+  },
+  "author": "CKSource (http://cksource.com/)",
+  "license": "MIT",
+  "bugs": "https://github.com/ckeditor/skills/issues",
+  "homepage": "https://github.com/ckeditor/skills#readme",
+  "devDependencies": {
+    "@ckeditor/ckeditor5-dev-changelog": "^59.0.0",
+    "@ckeditor/ckeditor5-dev-release-tools": "^59.0.0",
+    "listr2": "^11.0.0",
+    "upath": "^2.0.1",
+    "vitest": "^4.1.10"
+  },
+  "scripts": {
+    "nice": "ckeditor5-dev-changelog-create-entry",
+    "release:prepare-changelog": "node ./scripts/release/preparechangelog.js",
+    "release:prepare-packages": "node ./scripts/release/preparepackages.js",
+    "release:publish-packages": "node ./scripts/release/publishpackages.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  }
+}
