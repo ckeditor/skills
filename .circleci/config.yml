@@ -1,0 +1,25 @@
+version: 2.1
+
+jobs:
+  tests:
+    docker:
+      - image: cimg/node:24.11.0
+    steps:
+      - checkout
+      - run:
+          name: Disable Corepack
+          command: sudo corepack disable
+      - run:
+          name: Install pnpm
+          command: sudo npm i -g pnpm@11.9.0
+      - run:
+          name: Install dependencies
+          command: pnpm install --frozen-lockfile
+      - run:
+          name: Run unit tests
+          command: pnpm run test
+
+workflows:
+  main:
+    jobs:
+      - tests
