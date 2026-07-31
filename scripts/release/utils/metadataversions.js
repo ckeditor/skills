@@ -31,20 +31,21 @@ const FRONT_MATTER_REGEXP = /^---\r?\n[\s\S]*?\r?\n---/;
 const SKILL_VERSION_REGEXP = /^([ \t]+version:[ \t]*)(\S+)[ \t]*$/gm;
 
 /**
- * Reads the version from all metadata files. Returns one entry per file, as a single file may store the version
- * more than once.
+ * Returns the version stored in the metadata files. Throws when they do not all store the same one, as the whole
+ * repository shares a single version.
  *
  * @param {object} options
  * @param {string} options.cwd Root of the repository.
- * @returns {Promise.<Array.<{ file: string, versions: Array.<string> }>>}
+ * @returns {Promise.<string>}
  */
-export async function getMetadataVersions( { cwd } ) {
-	const versions = [];
+export async function getMetadataVersion( { cwd } ) {
+	// One entry per file, as a single file may store the version more than once.
+	const versionsPerFile = [];
 
 	for ( const { file, getVersionOwners } of JSON_FILES ) {
 		const versionOwners = getVersionOwners( await readJson( cwd, file ) );
 
-		versions.push( {
+		versionsPerFile.push( {
 			file,
 			versions: versionOwners.map( owner => getJsonVersion( owner, file ) )
 		} );
@@ -53,13 +54,21 @@ export async function getMetadataVersions( { cwd } ) {
 	for ( const file of await findSkillFiles( { cwd } ) ) {
 		const content = await fs.readFile( upath.join( cwd, file ), 'utf-8' );
 
-		versions.push( {
+		versionsPerFile.push( {
 			file,
 			versions: [ getSkillVersion( content, file ) ]
 		} );
 	}
 
-	return versions;
+	const uniqueVersions = [ ...new Set( versionsPerFile.flatMap( ( { versions } ) => versions ) ) ];
+
+	if ( uniqueVersions.length > 1 ) {
+		const details = versionsPerFile.map( ( { file, versions } ) => `* ${ file }: ${ versions.join( ', ' ) }` );
+
+		throw new Error( 'Expected all files to store the same version, but found:\n' + details.join( '\n' ) );
+	}
+
+	return uniqueVersions[ 0 ];
 }
 
 /**

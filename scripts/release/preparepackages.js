@@ -8,7 +8,7 @@
 import { Listr } from 'listr2';
 import upath from 'upath';
 import * as releaseTools from '@ckeditor/ckeditor5-dev-release-tools';
-import { getMetadataVersions, updateMetadataVersions } from './utils/metadataversions.js';
+import { getMetadataVersion, updateMetadataVersions } from './utils/metadataversions.js';
 
 const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
 const RELEASE_BRANCH = 'main';
@@ -45,19 +45,15 @@ const tasks = new Listr( [
 	{
 		title: 'Verify that all files store the same version.',
 		task: async () => {
-			const outdatedFiles = ( await getMetadataVersions( { cwd: ROOT_DIRECTORY } ) )
-				.filter( ( { versions } ) => versions.some( version => version !== currentVersion ) );
+			const metadataVersion = await getMetadataVersion( { cwd: ROOT_DIRECTORY } );
 
-			if ( !outdatedFiles.length ) {
+			if ( metadataVersion === currentVersion ) {
 				return;
 			}
 
-			const details = outdatedFiles.map( ( { file, versions } ) => `* ${ file }: ${ versions.join( ', ' ) }` );
-
 			return Promise.reject(
 				`Expected all files to store the "${ currentVersion }" version (as "package.json" does), ` +
-				'but found:\n' + details.join( '\n' ) + '\n' +
-				'Align them with the last release before releasing a new version.'
+				`but found "${ metadataVersion }". Align them with the last release before releasing a new version.`
 			);
 		}
 	},
