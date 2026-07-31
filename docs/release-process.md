@@ -58,7 +58,7 @@ Prerequisites:
 * A GitHub token for the last step: a **classic** personal access token with the `repo` scope. The prompt only
 	accepts 40-character tokens, so fine-grained tokens will not work.
 
-### 1. Prepare the changelog
+### Prepare the changelog
 
 ```bash
 pnpm release:prepare-changelog
