@@ -86,6 +86,9 @@ The script verifies the repository (right branch, not behind the remote, changel
 storing the same version), writes the new version to the four files listed above, and creates the release commit
 `Release: vX.Y.Z. [skip ci]` with the annotated `vX.Y.Z` tag.
 
+Despite the name, nothing is built here — this repository does not produce any packages, so the `--compile-only`
+option known from other repositories does not apply.
+
 Nothing has left your machine at this point. Inspect `git show HEAD` before continuing.
 
 ### Publish
