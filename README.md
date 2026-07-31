@@ -53,6 +53,8 @@ skills/ckeditor/
     └── skill-feedback.md         # how to report wrong/missing guidance
 .claude-plugin/                   # Claude Code plugin + marketplace manifests
 .github/ISSUE_TEMPLATE/           # skill-feedback issue form
+docs/release-process.md           # changelog entries, version bumping, releases
+scripts/release/                  # scripts behind the release process
 ```
 
 The skill is **version-agnostic by design**: it carries durable, universal
