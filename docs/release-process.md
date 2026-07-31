@@ -103,8 +103,3 @@ as that is what creating a release requires. The printed release page URL is the
 The steps are safe to re-run: the tag is only created when it does not exist yet, and the release page is only
 created when the latest release points at a different version. If a step failed halfway through, fix the cause and
 run it again. To undo a not-yet-pushed release commit, use `git reset --hard HEAD~1` and `git tag -d vX.Y.Z`.
-
-## Git tags
-
-Every release is an annotated tag named `vX.Y.Z`, pointing at the release commit. The changelog links each version
-to the `compare/vA.B.C...vX.Y.Z` view, so the tags must not be removed or moved.
