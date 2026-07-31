@@ -88,7 +88,7 @@ storing the same version), writes the new version to the four files listed above
 
 Nothing has left your machine at this point. Inspect `git show HEAD` before continuing.
 
-### 3. Publish
+### Publish
 
 ```bash
 pnpm release:publish-packages
