@@ -100,6 +100,6 @@ as that is what creating a release requires. The printed release page URL is the
 
 ### If something goes wrong
 
-The steps are safe to re-run: the tag is only created when it does not exist yet, and the release page is only
-created when the latest release points at a different version. If a step failed halfway through, fix the cause and
-run it again. To undo a not-yet-pushed release commit, use `git reset --hard HEAD~1` and `git tag -d vX.Y.Z`.
+The steps are safe to re-run, so fix the cause and run the failed one again. If that does not help — nothing landed
+on `main`, or the release page is missing — ping the `@ckeditor/ckeditor-5-platform` team. You can also just ask them
+to do the release for you.
