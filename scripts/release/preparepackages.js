@@ -8,7 +8,7 @@
 import { Listr } from 'listr2';
 import upath from 'upath';
 import * as releaseTools from '@ckeditor/ckeditor5-dev-release-tools';
-import { VERSIONED_FILE_PATTERNS, getMetadataVersions, updateMetadataVersions } from './utils/metadataversions.js';
+import { getMetadataVersions, updateMetadataVersions } from './utils/metadataversions.js';
 
 const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
 const RELEASE_BRANCH = 'main';
@@ -63,18 +63,22 @@ const tasks = new Listr( [
 	},
 	{
 		title: 'Update the version.',
-		task: async ( _, task ) => {
+		task: async ( context, task ) => {
 			await releaseTools.updateVersions( {
 				cwd: ROOT_DIRECTORY,
 				version: latestVersion
 			} );
 
-			const updatedFiles = await updateMetadataVersions( {
-				cwd: ROOT_DIRECTORY,
-				version: latestVersion
-			} );
+			// The `package.json` file is updated by the task above, the rest by the one below.
+			context.updatedFiles = [
+				'package.json',
+				...await updateMetadataVersions( {
+					cwd: ROOT_DIRECTORY,
+					version: latestVersion
+				} )
+			];
 
-			task.output = `Updated "package.json" and ${ updatedFiles.map( file => `"${ file }"` ).join( ', ' ) }.`;
+			task.output = `Updated ${ context.updatedFiles.map( file => `"${ file }"` ).join( ', ' ) }.`;
 		},
 		options: {
 			persistentOutput: true
@@ -82,11 +86,11 @@ const tasks = new Listr( [
 	},
 	{
 		title: 'Commit & tag phase.',
-		task: () => {
+		task: context => {
 			return releaseTools.commitAndTag( {
 				cwd: ROOT_DIRECTORY,
 				version: latestVersion,
-				files: VERSIONED_FILE_PATTERNS
+				files: context.updatedFiles
 			} );
 		}
 	}

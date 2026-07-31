@@ -7,19 +7,6 @@ import fs from 'node:fs/promises';
 import upath from 'upath';
 
 /**
- * Glob patterns of every file in the repository that stores the version. Used when creating the release commit.
- *
- * The `package.json` file is updated by the `updateVersions()` task from `@ckeditor/ckeditor5-dev-release-tools`,
- * the remaining files by the `updateMetadataVersions()` function below.
- */
-export const VERSIONED_FILE_PATTERNS = [
-	'package.json',
-	'.claude-plugin/plugin.json',
-	'.claude-plugin/marketplace.json',
-	'skills/*/SKILL.md'
-];
-
-/**
  * The agent-facing metadata files. Each descriptor points at every object in a file that owns a `version` key,
  * so adding another plugin to the marketplace manifest does not require touching this script.
  */
