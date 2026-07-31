@@ -95,7 +95,8 @@ pnpm release:publish-packages
 ```
 
 The script asks for the GitHub token, pushes `main` and the new tag, and creates the GitHub release page with the
-changelog section as its description. The printed release page URL is the last thing to verify.
+changelog section as its description. The token only needs write access to the repository contents (the `repo` scope),
+as that is what creating a release requires. The printed release page URL is the last thing to verify.
 
 ### If something goes wrong
 
