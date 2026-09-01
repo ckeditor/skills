@@ -4,6 +4,7 @@ jobs:
   tests:
     docker:
       - image: cimg/node:24.11.0
+    resource_class: small
     steps:
       - checkout
       - run:
