@@ -25,7 +25,7 @@ const SKILLS_DIRECTORY = 'skills';
 const SKILL_FILE = 'SKILL.md';
 
 // The YAML front matter block that opens a `SKILL.md` file.
-const FRONT_MATTER_REGEXP = /^---\r?\n[\s\S]*?\r?\n---/;
+export const FRONT_MATTER_REGEXP = /^---\r?\n[\s\S]*?\r?\n---/;
 
 // The `version` key in the front matter. It is nested in `metadata`, hence the required leading indentation.
 const SKILL_VERSION_REGEXP = /^([ \t]+version:[ \t]*)(\S+)[ \t]*$/gm;
@@ -117,7 +117,7 @@ export async function updateMetadataVersions( { version, cwd } ) {
  * @param {string} options.cwd Root of the repository.
  * @returns {Promise.<Array.<string>>}
  */
-async function findSkillFiles( { cwd } ) {
+export async function findSkillFiles( { cwd } ) {
 	const directoryEntries = await fs.readdir( upath.join( cwd, SKILLS_DIRECTORY ), { withFileTypes: true } );
 	const skillFiles = [];
 
@@ -195,13 +195,7 @@ function setSkillVersion( content, version, file ) {
  * @returns {Array.<{ match: string, key: string, version: string }>}
  */
 function findSkillVersionMatches( content, file ) {
-	const frontMatter = content.match( FRONT_MATTER_REGEXP )?.[ 0 ];
-
-	if ( !frontMatter ) {
-		throw new Error( `The "${ file }" file does not start with a YAML front matter block.` );
-	}
-
-	const matches = [ ...frontMatter.matchAll( SKILL_VERSION_REGEXP ) ]
+	const matches = [ ...getFrontMatter( content, file ).matchAll( SKILL_VERSION_REGEXP ) ]
 		.map( ( [ match, key, version ] ) => ( { match, key, version } ) );
 
 	if ( matches.length !== 1 ) {
@@ -215,10 +209,27 @@ function findSkillVersionMatches( content, file ) {
 }
 
 /**
+ * Returns the front matter block that opens a `SKILL.md` file, including the `---` fences.
+ *
+ * @param {string} content Content of a `SKILL.md` file.
+ * @param {string} file Path to the file, used in the error message.
+ * @returns {string}
+ */
+export function getFrontMatter( content, file ) {
+	const frontMatter = content.match( FRONT_MATTER_REGEXP )?.[ 0 ];
+
+	if ( !frontMatter ) {
+		throw new Error( `The "${ file }" file does not start with a YAML front matter block.` );
+	}
+
+	return frontMatter;
+}
+
+/**
  * @param {string} filePath An absolute path.
  * @returns {Promise.<boolean>}
  */
-async function isFile( filePath ) {
+export async function isFile( filePath ) {
 	return fs.stat( filePath )
 		.then( stats => stats.isFile() )
 		.catch( () => false );

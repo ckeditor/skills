@@ -4,6 +4,9 @@
 
 node_modules/
 
+# Created by the release scripts.
+/release/
+
 .idea
 .DS_Store
 npm-debug.log

@@ -5,12 +5,23 @@
  * For licensing, see LICENSE.md.
  */
 
+import { parseArgs } from 'node:util';
 import { Listr } from 'listr2';
 import upath from 'upath';
 import * as releaseTools from '@ckeditor/ckeditor5-dev-release-tools';
+import { verifyDiscoveryArtifacts } from './utils/discoveryartifacts.js';
 
 const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
 const RELEASE_BRANCH = 'main';
+
+const { values: options } = parseArgs( {
+	options: {
+		verbose: {
+			type: 'boolean',
+			default: false
+		}
+	}
+} );
 
 const latestVersion = releaseTools.getLastFromChangelog( ROOT_DIRECTORY );
 
@@ -41,6 +52,23 @@ const githubToken = await releaseTools.provideToken();
 
 const tasks = new Listr( [
 	{
+		title: 'Verifying the discovery artifacts.',
+		task: async ( _, task ) => {
+			await verifyDiscoveryArtifacts( {
+				cwd: ROOT_DIRECTORY,
+				version: latestVersion
+			} );
+
+			// The upload procedure to ckeditor.com is not established yet. Once it is, this task should
+			// upload the contents of the "release/" directory to "ckeditor.com/.well-known/agent-skills/".
+			task.output = 'Automatic upload to "ckeditor.com/.well-known/agent-skills/" is not implemented yet. ' +
+				'The verified artifacts are ready in the "release/" directory.';
+		},
+		options: {
+			persistentOutput: true
+		}
+	},
+	{
 		title: 'Pushing changes.',
 		task: () => {
 			return releaseTools.push( {
@@ -66,7 +94,9 @@ const tasks = new Listr( [
 			persistentOutput: true
 		}
 	}
-] );
+], {
+	renderer: options.verbose ? 'verbose' : 'default'
+} );
 
 try {
 	await tasks.run();

@@ -2,7 +2,7 @@
 
 This repository follows the same release process as other CKEditor projects: changes are described in changelog
 entry files while they are developed, and a release turns those entries into a `CHANGELOG.md` section, a version
-bump, a git tag, and a GitHub release page.
+bump, a git tag, a GitHub release page, and the Agent Skills Discovery artifacts to be served from `ckeditor.com`.
 
 ## Versioning
 
@@ -83,11 +83,16 @@ pnpm release:prepare-packages
 ```
 
 The script verifies the repository (right branch, not behind the remote, changelog section present, all files
-storing the same version), writes the new version to the four files listed above, and creates the release commit
-`Release: vX.Y.Z. [skip ci]` with the annotated `vX.Y.Z` tag.
+storing the same version), writes the new version to the four files listed above, builds and verifies the
+discovery artifacts, and creates the release commit `Release: vX.Y.Z. [skip ci]` with the annotated `vX.Y.Z` tag.
 
-Despite the name, nothing is built here — this repository does not produce any packages, so the `--compile-only`
-option known from other repositories does not apply.
+The [Agent Skills Discovery](https://github.com/cloudflare/agent-skills-discovery-rfc) artifacts — a
+`<skill>-<version>.tar.gz` archive per skill plus an `index.json` manifest, generated from the `SKILL.md` front
+matter — land in the gitignored `release/` directory and are not part of the commit. Once uploaded to
+`ckeditor.com/.well-known/agent-skills/`, they make `npx skills add https://ckeditor.com` install the skills.
+
+Add `--compile-only` to only build and verify the artifacts (using the current `package.json` version) — CI runs
+this mode as a smoke test. Add `--verbose` for more detailed output.
 
 Nothing has left your machine at this point. Inspect `git show HEAD` before continuing.
 
@@ -97,9 +102,14 @@ Nothing has left your machine at this point. Inspect `git show HEAD` before cont
 pnpm release:publish-packages
 ```
 
-The script asks for the GitHub token, pushes `main` and the new tag, and creates the GitHub release page with the
-changelog section as its description. The token only needs write access to the repository contents (the `repo` scope),
-as that is what creating a release requires. The printed release page URL is the last thing to verify.
+The script asks for the GitHub token, re-checks the discovery artifacts against the released version (a failure
+aborts the release before anything is pushed — re-run `pnpm release:prepare-packages` to rebuild them), pushes
+`main` and the new tag, and creates the GitHub release page with the changelog section as its description. The
+token only needs write access to the repository contents (the `repo` scope), as that is what creating a release
+requires. The printed release page URL is the last thing to verify.
+
+The artifacts are not uploaded anywhere yet, as the upload procedure to `ckeditor.com` is not established — the
+script only reports that they are ready in `release/`.
 
 ### If something goes wrong
 
