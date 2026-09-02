@@ -234,12 +234,15 @@ async function createArchive( { archiveFileName, artifactsDirectory, skillDirect
 
 /**
  * Returns the files of a skill directory as sorted paths relative to it, ready to become archive entries.
+ * Only git-tracked, visible, regular files are accepted — anything else fails the release, as the archives
+ * are installed on end-user machines and must ship exactly the committed skill content.
  *
  * @param {string} skillDirectory Absolute path to the skill directory.
  * @returns {Promise.<Array.<string>>}
  */
 async function findArchiveEntries( skillDirectory ) {
 	const directoryEntries = await fs.readdir( skillDirectory, { recursive: true, withFileTypes: true } );
+	const trackedFiles = await findTrackedFiles( skillDirectory );
 	const files = [];
 
 	for ( const directoryEntry of directoryEntries ) {
@@ -249,8 +252,8 @@ async function findArchiveEntries( skillDirectory ) {
 
 		const file = upath.relative( skillDirectory, upath.join( directoryEntry.parentPath, directoryEntry.name ) );
 
-		// Hidden files (`.DS_Store` and friends) are never legitimate skill content, and the archives are
-		// installed on end-user machines — refuse loudly instead of shipping them silently.
+		// Hidden files (`.DS_Store` and friends) are never legitimate skill content — refuse loudly instead
+		// of shipping them silently.
 		if ( file.split( '/' ).some( segment => segment.startsWith( '.' ) ) ) {
 			throw new Error( `Remove the hidden "${ file }" entry from the "${ skillDirectory }" directory, as it must not be published.` );
 		}
@@ -260,11 +263,48 @@ async function findArchiveEntries( skillDirectory ) {
 			throw new Error( `Expected the "${ file }" entry of the "${ skillDirectory }" directory to be a regular file.` );
 		}
 
+		// A file unknown to git is either a leftover that must not be published or a legitimate addition
+		// that must be committed first — silently picking either side would be wrong.
+		if ( !trackedFiles.includes( file ) ) {
+			throw new Error( `The "${ file }" entry of the "${ skillDirectory }" directory is not tracked by git. Add it to git or remove it.` );
+		}
+
 		files.push( file );
+	}
+
+	// The other way around, a tracked file missing from disk means the working tree is out of sync with git.
+	const missingFiles = trackedFiles.filter( trackedFile => !files.includes( trackedFile ) );
+
+	if ( missingFiles.length ) {
+		throw new Error(
+			`The "${ skillDirectory }" directory is missing files tracked by git: ` +
+			`${ missingFiles.map( file => `"${ file }"` ).join( ', ' ) }. Restore them or remove them from git.`
+		);
 	}
 
 	// The traversal order is platform-dependent, so sort for a stable archive layout.
 	return files.sort();
+}
+
+/**
+ * Returns the git-tracked files of a directory as paths relative to it.
+ *
+ * @param {string} directory An absolute path.
+ * @returns {Promise.<Array.<string>>}
+ */
+async function findTrackedFiles( directory ) {
+	try {
+		// The `-z` flag separates the paths with NUL characters, so no path gets quoted or escaped.
+		const { stdout } = await execFileAsync( 'git', [ 'ls-files', '-z' ], { cwd: directory } );
+
+		return stdout.split( '\0' ).filter( file => file !== '' );
+	} catch ( error ) {
+		if ( error.code === 'ENOENT' ) {
+			throw new Error( 'Could not find the "git" executable required to list the skill files.' );
+		}
+
+		throw new Error( `Listing the git-tracked files of the "${ directory }" directory failed: ${ ( error.stderr || error.message ).trim() }` );
+	}
 }
 
 /**

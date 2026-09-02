@@ -297,6 +297,24 @@ describe( 'scripts/release/utils/discoveryartifacts', () => {
 			);
 		} );
 
+		it( 'should throw when a skill directory contains a file not tracked by git', async () => {
+			await createRepository();
+			await writeFile( upath.join( 'skills', 'ckeditor', 'references', 'draft.md' ), 'Work in progress.\n' );
+
+			await expect( prepareDiscoveryArtifacts( { cwd, version: '1.2.3' } ) ).rejects.toThrow(
+				'The "references/draft.md" entry of the'
+			);
+		} );
+
+		it( 'should throw when a git-tracked skill file is missing from disk', async () => {
+			await createRepository();
+			await fs.rm( upath.join( cwd, 'skills', 'ckeditor', 'references', 'usage.md' ) );
+
+			await expect( prepareDiscoveryArtifacts( { cwd, version: '1.2.3' } ) ).rejects.toThrow(
+				'is missing files tracked by git: "references/usage.md". Restore them or remove them from git.'
+			);
+		} );
+
 		it( 'should throw when the repository does not contain any skill', async () => {
 			await createRepository( { skills: [] } );
 
@@ -445,6 +463,10 @@ describe( 'scripts/release/utils/discoveryartifacts', () => {
 		for ( const name of skills ) {
 			await createSkill( name );
 		}
+
+		// The archives ship only git-tracked files, so the fixture must be a repository with its content staged.
+		await execFileAsync( 'git', [ 'init', '--quiet' ], { cwd } );
+		await execFileAsync( 'git', [ 'add', '--all' ], { cwd } );
 	}
 
 	async function createSkill( name ) {
