@@ -9,8 +9,10 @@ import { parseArgs } from 'node:util';
 import { Listr } from 'listr2';
 import upath from 'upath';
 import * as releaseTools from '@ckeditor/ckeditor5-dev-release-tools';
-import { getMetadataVersion, updateMetadataVersions } from './utils/metadataversions.js';
-import { prepareDiscoveryArtifacts, verifyDiscoveryArtifacts } from './utils/discoveryartifacts.js';
+import { quote } from './utils/assert.js';
+import { findUncommittedFiles } from './utils/git.js';
+import { getMetadataVersion, isMetadataFile, updateMetadataVersions } from './utils/metadataversions.js';
+import { prepareDiscoveryArtifacts } from './utils/discoveryartifacts.js';
 
 const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
 const RELEASE_BRANCH = 'main';
@@ -54,6 +56,19 @@ const tasks = new Listr( [
 				changes: versionChangelog
 			} );
 
+			// The discovery artifacts are built from the working tree, so an uncommitted change would be released
+			// without being part of the release commit. The version files are the exception, as the release commits
+			// them anyway (and a run that failed after updating the version leaves them modified).
+			const uncommittedFiles = ( await findUncommittedFiles( { cwd: ROOT_DIRECTORY } ) )
+				.filter( file => file !== 'package.json' && !isMetadataFile( file ) );
+
+			if ( uncommittedFiles.length ) {
+				errors.push(
+					`Uncommitted changes in ${ quote( uncommittedFiles ) } would be released without being committed. ` +
+					'Commit or discard them.'
+				);
+			}
+
 			if ( !errors.length ) {
 				return;
 			}
@@ -94,7 +109,7 @@ const tasks = new Listr( [
 				} )
 			];
 
-			task.output = `Updated ${ context.updatedFiles.map( file => `"${ file }"` ).join( ', ' ) }.`;
+			task.output = `Updated ${ quote( context.updatedFiles ) }.`;
 		},
 		options: {
 			persistentOutput: true
@@ -111,19 +126,10 @@ const tasks = new Listr( [
 
 			// The artifacts are served from ckeditor.com rather than committed, so they do not
 			// extend `context.updatedFiles`.
-			task.output = `Created ${ createdFiles.map( file => `"${ file }"` ).join( ', ' ) }.`;
+			task.output = `Created ${ quote( createdFiles ) }.`;
 		},
 		options: {
 			persistentOutput: true
-		}
-	},
-	{
-		title: 'Verify the release directory.',
-		task: () => {
-			return verifyDiscoveryArtifacts( {
-				cwd: ROOT_DIRECTORY,
-				version: releaseVersion
-			} );
 		}
 	},
 	{

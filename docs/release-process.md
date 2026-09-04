@@ -53,7 +53,10 @@ the `Other` type or skip the entry altogether.
 Prerequisites:
 
 * Node.js `>=24.11.0` and pnpm `^11.9.0`, with dependencies installed (`pnpm install`).
-* The `main` branch, up to date with the remote and with a clean working tree.
+* The `git` and `tar` executables on the `PATH`. They list and archive the skill files. Both GNU tar and bsdtar
+	(the `tar` of macOS and Windows) work.
+* The `main` branch, up to date with the remote and with a clean working tree. Uncommitted changes to the version
+	files are tolerated, as the release commit includes them anyway.
 * Permission to push to `main`.
 * A GitHub token for the last step: a **classic** personal access token with the `repo` scope. The prompt only
 	accepts 40-character tokens, so fine-grained tokens will not work.
@@ -82,8 +85,8 @@ Add `--dry-run` to print the section without touching any file, and `--date=YYYY
 pnpm release:prepare-packages
 ```
 
-The script verifies the repository (right branch, not behind the remote, changelog section present, all files
-storing the same version), writes the new version to the four files listed above, builds and verifies the
+The script verifies the repository (right branch, not behind the remote, clean working tree, changelog section
+present, all files storing the same version), writes the new version to the four files listed above, builds the
 discovery artifacts, and creates the release commit `Release: vX.Y.Z. [skip ci]` with the annotated `vX.Y.Z` tag.
 
 The [Agent Skills Discovery](https://github.com/cloudflare/agent-skills-discovery-rfc) artifacts — a
@@ -91,7 +94,12 @@ The [Agent Skills Discovery](https://github.com/cloudflare/agent-skills-discover
 matter — land in the gitignored `release/` directory and are not part of the commit. Once uploaded to
 `ckeditor.com/.well-known/agent-skills/`, they make `npx skills add https://ckeditor.com` install the skills.
 
-Add `--compile-only` to only build and verify the artifacts (using the current `package.json` version) — CI runs
+An archive contains exactly the git-tracked files of the skill directory, so an untracked (and not git-ignored) or
+deleted file inside a skill directory fails the build: commit or remove it first. Hidden files, symbolic links, paths
+with characters outside printable ASCII or starting with `@`, and a `SKILL.md` tracked under another letter case fail
+it too. Every directory under `skills/` is a skill, so one without a `SKILL.md` fails the build as well.
+
+Add `--compile-only` to only build the artifacts (using the current `package.json` version) — CI runs
 this mode as a smoke test. Add `--verbose` for more detailed output.
 
 Nothing has left your machine at this point. Inspect `git show HEAD` before continuing.
@@ -102,11 +110,11 @@ Nothing has left your machine at this point. Inspect `git show HEAD` before cont
 pnpm release:publish-packages
 ```
 
-The script asks for the GitHub token, re-checks the discovery artifacts against the released version (a failure
-aborts the release before anything is pushed — re-run `pnpm release:prepare-packages` to rebuild them), pushes
-`main` and the new tag, and creates the GitHub release page with the changelog section as its description. The
-token only needs write access to the repository contents (the `repo` scope), as that is what creating a release
-requires. The printed release page URL is the last thing to verify.
+The script asks for the GitHub token, checks that the discovery artifacts are complete and match the released version
+and the current `SKILL.md` files (a failure aborts the release before anything is pushed — re-run
+`pnpm release:prepare-packages` to rebuild them), pushes `main` and the new tag, and creates the GitHub release page
+with the changelog section as its description. The token only needs write access to the repository contents (the
+`repo` scope), as that is what creating a release requires. The printed release page URL is the last thing to verify.
 
 The artifacts are not uploaded anywhere yet, as the upload procedure to `ckeditor.com` is not established — the
 script only reports that they are ready in `release/`.

@@ -7,7 +7,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import upath from 'upath';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { getMetadataVersion, updateMetadataVersions } from '../../../scripts/release/utils/metadataversions.js';
+import { getMetadataVersion, isMetadataFile, updateMetadataVersions } from '../../../scripts/release/utils/metadataversions.js';
 
 describe( 'scripts/release/utils/metadataversions', () => {
 	let cwd;
@@ -106,10 +106,9 @@ describe( 'scripts/release/utils/metadataversions', () => {
 			);
 		} );
 
-		it( 'should ignore files and skill-less directories in the skills directory', async () => {
+		it( 'should ignore files in the skills directory', async () => {
 			await createRepository( { version: '1.2.3' } );
 			await fs.writeFile( upath.join( cwd, 'skills', 'README.md' ), 'Not a skill.\n', 'utf-8' );
-			await fs.mkdir( upath.join( cwd, 'skills', 'work-in-progress' ) );
 
 			expect( await getMetadataVersion( { cwd } ) ).to.equal( '1.2.3' );
 		} );
@@ -150,6 +149,31 @@ describe( 'scripts/release/utils/metadataversions', () => {
 				.to.equal( contentBefore.replace( 'version: 1.2.3', 'version: 2.0.0' ) );
 		} );
 
+		it( 'should keep the substitution patterns of a skill file intact', async () => {
+			await createRepository( { version: '1.2.3' } );
+
+			// These sequences have a meaning in the replacement string of `String#replace()`.
+			const contentBefore = '---\nname: ckeditor\ndescription: Costs $$ and $& or $` and $\'.\nmetadata:\n  version: 1.2.3\n---\n';
+
+			await writeSkillFile( 'ckeditor', contentBefore );
+			await updateMetadataVersions( { cwd, version: '2.0.0' } );
+
+			expect( await readFile( 'skills/ckeditor/SKILL.md' ) )
+				.to.equal( contentBefore.replace( 'version: 1.2.3', 'version: 2.0.0' ) );
+		} );
+
+		it( 'should keep the CRLF line endings of a skill file', async () => {
+			await createRepository( { version: '1.2.3' } );
+
+			const contentBefore = ( await readFile( 'skills/ckeditor/SKILL.md' ) ).replaceAll( '\n', '\r\n' );
+
+			await writeSkillFile( 'ckeditor', contentBefore );
+			await updateMetadataVersions( { cwd, version: '2.0.0' } );
+
+			expect( await readFile( 'skills/ckeditor/SKILL.md' ) )
+				.to.equal( contentBefore.replace( 'version: 1.2.3', 'version: 2.0.0' ) );
+		} );
+
 		it( 'should keep the formatting of the JSON files', async () => {
 			await createRepository( { version: '1.2.3' } );
 
@@ -178,6 +202,26 @@ describe( 'scripts/release/utils/metadataversions', () => {
 				'Expected exactly one "metadata.version" entry in the front matter of the "skills/ckeditor/SKILL.md" file, found 0.'
 			);
 		} );
+	} );
+
+	describe( 'isMetadataFile()', () => {
+		for ( const file of [ '.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', 'skills/ckeditor/SKILL.md' ] ) {
+			it( `should recognize "${ file }"`, () => {
+				expect( isMetadataFile( file ) ).to.equal( true );
+			} );
+		}
+
+		for ( const file of [
+			'package.json',
+			'SKILL.md',
+			'skills/ckeditor/',
+			'skills/ckeditor/references/SKILL.md',
+			'docs/SKILL.md'
+		] ) {
+			it( `should not recognize "${ file }"`, () => {
+				expect( isMetadataFile( file ) ).to.equal( false );
+			} );
+		}
 	} );
 
 	/**
