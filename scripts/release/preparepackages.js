@@ -5,24 +5,45 @@
  * For licensing, see LICENSE.md.
  */
 
+import { parseArgs } from 'node:util';
 import { Listr } from 'listr2';
 import upath from 'upath';
 import * as releaseTools from '@ckeditor/ckeditor5-dev-release-tools';
-import { getMetadataVersion, updateMetadataVersions } from './utils/metadataversions.js';
+import { quote } from './utils/assert.js';
+import { findUncommittedFiles } from './utils/git.js';
+import { getMetadataVersion, isMetadataFile, updateMetadataVersions } from './utils/metadataversions.js';
+import { prepareDiscoveryArtifacts } from './utils/discoveryartifacts.js';
 
 const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
 const RELEASE_BRANCH = 'main';
 
+const { values: options } = parseArgs( {
+	options: {
+		'compile-only': {
+			type: 'boolean',
+			default: false
+		},
+		verbose: {
+			type: 'boolean',
+			default: false
+		}
+	}
+} );
+
+const compileOnly = options[ 'compile-only' ];
+
 const currentVersion = releaseTools.getCurrent( ROOT_DIRECTORY );
 const latestVersion = releaseTools.getLastFromChangelog( ROOT_DIRECTORY );
 
-if ( !latestVersion ) {
+if ( !latestVersion && !compileOnly ) {
 	console.error( 'Cannot find any version in the changelog. Run "pnpm release:prepare-changelog" first.' );
 
 	process.exit( 1 );
 }
 
-const versionChangelog = releaseTools.getChangesForVersion( latestVersion, ROOT_DIRECTORY );
+// In the compile-only mode the metadata files are not updated, so the artifacts describe the current version.
+const releaseVersion = compileOnly ? currentVersion : latestVersion;
+const versionChangelog = compileOnly ? null : releaseTools.getChangesForVersion( latestVersion, ROOT_DIRECTORY );
 
 const tasks = new Listr( [
 	{
@@ -35,12 +56,26 @@ const tasks = new Listr( [
 				changes: versionChangelog
 			} );
 
+			// The discovery artifacts are built from the working tree, so an uncommitted change would be released
+			// without being part of the release commit. The version files are the exception, as the release commits
+			// them anyway (and a run that failed after updating the version leaves them modified).
+			const uncommittedFiles = ( await findUncommittedFiles( { cwd: ROOT_DIRECTORY } ) )
+				.filter( file => file !== 'package.json' && !isMetadataFile( file ) );
+
+			if ( uncommittedFiles.length ) {
+				errors.push(
+					`Uncommitted changes in ${ quote( uncommittedFiles ) } would be released without being committed. ` +
+					'Commit or discard them.'
+				);
+			}
+
 			if ( !errors.length ) {
 				return;
 			}
 
 			return Promise.reject( 'Aborted due to errors.\n' + errors.map( message => `* ${ message }` ).join( '\n' ) );
-		}
+		},
+		skip: () => compileOnly
 	},
 	{
 		title: 'Verify that all files store the same version.',
@@ -74,7 +109,24 @@ const tasks = new Listr( [
 				} )
 			];
 
-			task.output = `Updated ${ context.updatedFiles.map( file => `"${ file }"` ).join( ', ' ) }.`;
+			task.output = `Updated ${ quote( context.updatedFiles ) }.`;
+		},
+		options: {
+			persistentOutput: true
+		},
+		skip: () => compileOnly
+	},
+	{
+		title: 'Prepare the discovery artifacts.',
+		task: async ( _, task ) => {
+			const createdFiles = await prepareDiscoveryArtifacts( {
+				cwd: ROOT_DIRECTORY,
+				version: releaseVersion
+			} );
+
+			// The artifacts are served from ckeditor.com rather than committed, so they do not
+			// extend `context.updatedFiles`.
+			task.output = `Created ${ quote( createdFiles ) }.`;
 		},
 		options: {
 			persistentOutput: true
@@ -88,9 +140,12 @@ const tasks = new Listr( [
 				version: latestVersion,
 				files: context.updatedFiles
 			} );
-		}
+		},
+		skip: () => compileOnly
 	}
-] );
+], {
+	renderer: options.verbose ? 'verbose' : 'default'
+} );
 
 tasks.run()
 	.catch( err => {

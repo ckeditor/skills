@@ -19,6 +19,9 @@ jobs:
       - run:
           name: Run unit tests
           command: pnpm run test
+      - run:
+          name: Build the discovery artifacts
+          command: pnpm run release:prepare-packages --compile-only --verbose
 
 workflows:
   main:

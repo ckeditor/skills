@@ -5,6 +5,8 @@
 
 import fs from 'node:fs/promises';
 import upath from 'upath';
+import { getFrontMatter } from './frontmatter.js';
+import { findSkillFiles, SKILL_FILE, SKILLS_DIRECTORY } from './skills.js';
 
 /**
  * The agent-facing metadata files. Each descriptor points at every object in a file that owns a `version` key,
@@ -20,12 +22,6 @@ const JSON_FILES = [
 		getVersionOwners: json => [ json.metadata, ...json.plugins ]
 	}
 ];
-
-const SKILLS_DIRECTORY = 'skills';
-const SKILL_FILE = 'SKILL.md';
-
-// The YAML front matter block that opens a `SKILL.md` file.
-const FRONT_MATTER_REGEXP = /^---\r?\n[\s\S]*?\r?\n---/;
 
 // The `version` key in the front matter. It is nested in `metadata`, hence the required leading indentation.
 const SKILL_VERSION_REGEXP = /^([ \t]+version:[ \t]*)(\S+)[ \t]*$/gm;
@@ -111,33 +107,15 @@ export async function updateMetadataVersions( { version, cwd } ) {
 }
 
 /**
- * Returns paths (relative to `cwd`) to the `SKILL.md` file of every skill in the repository.
+ * Checks whether a file is one of the metadata files.
  *
- * @param {object} options
- * @param {string} options.cwd Root of the repository.
- * @returns {Promise.<Array.<string>>}
+ * @param {string} file Path to the file, relative to the repository root.
+ * @returns {boolean}
  */
-async function findSkillFiles( { cwd } ) {
-	const directoryEntries = await fs.readdir( upath.join( cwd, SKILLS_DIRECTORY ), { withFileTypes: true } );
-	const skillFiles = [];
+export function isMetadataFile( file ) {
+	const isSkillFile = upath.basename( file ) === SKILL_FILE && upath.dirname( upath.dirname( file ) ) === SKILLS_DIRECTORY;
 
-	for ( const directoryEntry of directoryEntries ) {
-		if ( !directoryEntry.isDirectory() ) {
-			continue;
-		}
-
-		const file = upath.join( SKILLS_DIRECTORY, directoryEntry.name, SKILL_FILE );
-
-		if ( await isFile( upath.join( cwd, file ) ) ) {
-			skillFiles.push( file );
-		}
-	}
-
-	if ( !skillFiles.length ) {
-		throw new Error( `Could not find any "${ SKILL_FILE }" file in the "${ SKILLS_DIRECTORY }" directory.` );
-	}
-
-	return skillFiles;
+	return JSON_FILES.some( json => json.file === file ) || isSkillFile;
 }
 
 /**
@@ -163,14 +141,24 @@ function getJsonVersion( versionOwner, file ) {
 }
 
 /**
+ * Returns the `metadata.version` entry of the front matter of a `SKILL.md` file. Anything other than exactly one
+ * match means the front matter is not shaped as expected, so the release must not continue.
+ *
  * @param {string} content Content of a `SKILL.md` file.
  * @param {string} file Path to the file, used in the error message.
  * @returns {string}
  */
 function getSkillVersion( content, file ) {
-	const [ { version } ] = findSkillVersionMatches( content, file );
+	const matches = [ ...getFrontMatter( content, file ).matchAll( SKILL_VERSION_REGEXP ) ];
 
-	return version;
+	if ( matches.length !== 1 ) {
+		throw new Error(
+			`Expected exactly one "metadata.version" entry in the front matter of the "${ file }" file, ` +
+			`found ${ matches.length }.`
+		);
+	}
+
+	return matches[ 0 ][ 2 ];
 }
 
 /**
@@ -180,46 +168,11 @@ function getSkillVersion( content, file ) {
  * @returns {string}
  */
 function setSkillVersion( content, version, file ) {
-	const [ { match, key } ] = findSkillVersionMatches( content, file );
-	const frontMatter = content.match( FRONT_MATTER_REGEXP )[ 0 ];
+	const frontMatter = getFrontMatter( content, file );
 
-	return content.replace( frontMatter, frontMatter.replace( match, key + version ) );
-}
+	// Looked up first, so that a file with an unexpected shape fails the release instead of being left as is.
+	getSkillVersion( content, file );
 
-/**
- * Finds the `metadata.version` entry in the front matter of a `SKILL.md` file. Anything other than exactly one
- * match means the front matter is not shaped as expected, so the release must not continue.
- *
- * @param {string} content Content of a `SKILL.md` file.
- * @param {string} file Path to the file, used in the error message.
- * @returns {Array.<{ match: string, key: string, version: string }>}
- */
-function findSkillVersionMatches( content, file ) {
-	const frontMatter = content.match( FRONT_MATTER_REGEXP )?.[ 0 ];
-
-	if ( !frontMatter ) {
-		throw new Error( `The "${ file }" file does not start with a YAML front matter block.` );
-	}
-
-	const matches = [ ...frontMatter.matchAll( SKILL_VERSION_REGEXP ) ]
-		.map( ( [ match, key, version ] ) => ( { match, key, version } ) );
-
-	if ( matches.length !== 1 ) {
-		throw new Error(
-			`Expected exactly one "metadata.version" entry in the front matter of the "${ file }" file, ` +
-			`found ${ matches.length }.`
-		);
-	}
-
-	return matches;
-}
-
-/**
- * @param {string} filePath An absolute path.
- * @returns {Promise.<boolean>}
- */
-async function isFile( filePath ) {
-	return fs.stat( filePath )
-		.then( stats => stats.isFile() )
-		.catch( () => false );
+	// The front matter opens the file, so what follows it is copied unchanged.
+	return frontMatter.replace( SKILL_VERSION_REGEXP, ( _, key ) => key + version ) + content.slice( frontMatter.length );
 }
