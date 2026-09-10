@@ -11,17 +11,18 @@ import { assert, quote } from './assert.js';
 import { createArchive } from './archive.js';
 import { findSkills } from './skills.js';
 
-// Wiped and rebuilt on every run, so it must not hold anything else. Its contents are meant to be uploaded
-// as-is into `ckeditor.com/.well-known/agent-skills/`.
-const RELEASE_DIRECTORY = 'release';
+// Wiped and rebuilt on every run, so it must not hold anything else. Its contents are uploaded as-is into
+// `ckeditor.com/.well-known/agent-skills/`.
+export const RELEASE_DIRECTORY = 'release';
 
-const INDEX_FILE = 'index.json';
+export const INDEX_FILE = 'index.json';
 
 // The Agent Skills Discovery index format, as defined by https://github.com/cloudflare/agent-skills-discovery-rfc.
 const SCHEMA_URL = 'https://schemas.agentskills.io/discovery/0.2.0/schema.json';
 
-// Where the artifacts will be publicly served from once uploaded to ckeditor.com.
-const URL_PREFIX = '/.well-known/agent-skills/';
+// Where the artifacts are publicly served from, and their path in the bucket behind the site.
+export const SITE_URL = 'https://ckeditor.com';
+export const URL_PREFIX = '/.well-known/agent-skills/';
 
 // The remedy for every mismatch between the release directory and the repository.
 const REBUILD_HINT = 'Run "pnpm release:prepare-packages" first.';

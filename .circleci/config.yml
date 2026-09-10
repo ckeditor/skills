@@ -1,5 +1,53 @@
 version: 2.1
 
+parameters:
+  triggerCommitHash:
+    type: string
+    default: ""
+  isRelease:
+    type: boolean
+    default: false
+
+orbs:
+  aws-cli: circleci/aws-cli@5.4.2
+
+commands:
+  bootstrap_repository_command:
+    description: "Install pnpm and the dependencies"
+    steps:
+      - run:
+          name: Disable Corepack
+          command: sudo corepack disable
+      - run:
+          name: Install pnpm
+          command: sudo npm i -g pnpm@11.14.0
+      - run:
+          name: Install dependencies
+          command: pnpm install --frozen-lockfile
+
+  gpg_credentials_command:
+    description: "Setup GPG configuration"
+    steps:
+      - run:
+          name: Setup GPG configuration
+          command: |
+            #!/bin/bash
+
+            echo "$CKE5_GPG_KEY" | base64 --decode | gpg --import --quiet
+
+  git_credentials_command:
+    description: "Setup git configuration"
+    steps:
+      - gpg_credentials_command
+      - run:
+          name: Setup git configuration
+          command: |
+            git config --global user.email "ckeditor-bot@cksource.com"
+            git config --global user.name "CKEditorBot"
+            git config --global user.signingkey 3F615B600F38B27B
+            git config --global commit.gpgsign true
+            git config --global tag.gpgSign true
+
 jobs:
   tests:
     docker:
@@ -7,23 +55,132 @@ jobs:
     resource_class: small
     steps:
       - checkout
-      - run:
-          name: Disable Corepack
-          command: sudo corepack disable
-      - run:
-          name: Install pnpm
-          command: sudo npm i -g pnpm@11.9.0
-      - run:
-          name: Install dependencies
-          command: pnpm install --frozen-lockfile
+      - bootstrap_repository_command
       - run:
           name: Run unit tests
           command: pnpm run test
       - run:
           name: Build the discovery artifacts
-          command: pnpm run release:prepare-packages --compile-only --verbose
+          command: npm run release:prepare-packages -- --compile-only --verbose
+
+  trigger_release_process:
+    docker:
+      - image: cimg/node:24.11.0
+    resource_class: small
+    steps:
+      - checkout
+      - bootstrap_repository_command
+      - run:
+          name: Verify if the project is ready to release
+          command: |
+            #!/bin/bash
+
+            # Exit code 1 means there is nothing to release, so the job ends quietly. Any other failure fails it.
+            set +e
+
+            node scripts/ci/is-project-ready-to-release.js
+            EXIT_CODE=$?
+
+            if [ ${EXIT_CODE} -eq 1 ]; then
+              circleci-agent step halt
+            elif [ ${EXIT_CODE} -ne 0 ]; then
+              exit ${EXIT_CODE}
+            fi
+      - run:
+          name: Disable the redundant workflows option
+          command: pnpm ckeditor5-dev-ci-circle-disable-auto-cancel-builds --organization ckeditor --repository skills
+      - run:
+          name: Trigger the release pipeline
+          command: >-
+            pnpm ckeditor5-dev-ci-trigger-circle-build
+            --slug ckeditor/skills
+            --release-branch main
+            --pipeline-definition-id cda2f869-539f-4213-94b1-04ac1121597b
+      - run:
+          name: Enable the redundant workflows option
+          command: pnpm ckeditor5-dev-ci-circle-enable-auto-cancel-builds --organization ckeditor --repository skills
+          when: always
+
+  release_project:
+    docker:
+      - image: cimg/node:24.11.0
+    resource_class: small
+    steps:
+      - checkout
+      - add_ssh_keys
+      - bootstrap_repository_command
+      - run:
+          name: Verify the trigger commit from the repository
+          command: |
+            #!/bin/bash
+
+            CKE5_LATEST_COMMIT_HASH=$( git log -n 1 --pretty=format:%H origin/main )
+            CKE5_TRIGGER_COMMIT_HASH=<< pipeline.parameters.triggerCommitHash >>
+
+            if [[ "${CKE5_LATEST_COMMIT_HASH}" != "${CKE5_TRIGGER_COMMIT_HASH}" ]]; then
+              echo "There is a newer commit in the repository on the \`#main\` branch. Use its build to start the release."
+              circleci-agent step halt
+            fi
+      - git_credentials_command
+      - run:
+          name: Verify if a releaser triggered the job
+          environment:
+            CKE5_CIRCLE_APPROVAL_JOB_NAME: release_approval
+            CKE5_GITHUB_ORGANIZATION: ckeditor
+            CKE5_GITHUB_TEAM_SLUG: ckeditor-5-publishers
+          command: |
+            #!/bin/bash
+
+            # Do not fail if the Node script ends with non-zero exit code.
+            set +e
+
+            pnpm ckeditor5-dev-ci-is-job-triggered-by-member
+            EXIT_CODE=$?
+
+            if [ ${EXIT_CODE} -ne 0 ]; then
+              echo "Aborting the release due to failed verification of the approver (no rights to release)."
+              circleci-agent step halt
+            fi
+      - aws-cli/setup:
+          role_arn: ${AWS_OIDC_ROLE_ARN}
+          region: us-east-1
+          session_duration: "900"
+      - run:
+          name: Verify AWS identity
+          command: aws sts get-caller-identity
+      - run:
+          name: Disable the redundant workflows option
+          command: pnpm ckeditor5-dev-ci-circle-disable-auto-cancel-builds --organization ckeditor --repository skills
+      - run:
+          name: Prepare the release commit
+          command: npm run release:prepare-packages -- --verbose
+      - run:
+          name: Publish the release
+          command: npm run release:publish-packages -- --verbose
+      - run:
+          name: Enable the redundant workflows option
+          command: pnpm ckeditor5-dev-ci-circle-enable-auto-cancel-builds --organization ckeditor --repository skills
+          when: always
 
 workflows:
   main:
+    when:
+      not: << pipeline.parameters.isRelease >>
     jobs:
       - tests
+      - trigger_release_process:
+          requires:
+            - tests
+          filters:
+            branches:
+              only:
+                - main
+
+  release:
+    when: << pipeline.parameters.isRelease >>
+    jobs:
+      - release_approval:
+          type: approval
+      - release_project:
+          requires:
+            - release_approval
