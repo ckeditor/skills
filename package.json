@@ -17,8 +17,10 @@
   "bugs": "https://github.com/ckeditor/skills/issues",
   "homepage": "https://github.com/ckeditor/skills#readme",
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-changelog": "^59.0.0",
-    "@ckeditor/ckeditor5-dev-release-tools": "^59.0.0",
+    "@ckeditor/ckeditor5-dev-changelog": "^62.0.0",
+    "@ckeditor/ckeditor5-dev-ci": "^62.0.0",
+    "@ckeditor/ckeditor5-dev-release-tools": "^62.0.0",
+    "@octokit/rest": "^22.0.1",
     "js-yaml": "^5.4.1",
     "listr2": "^11.0.0",
     "upath": "^2.0.1",
