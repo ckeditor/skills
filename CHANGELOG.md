@@ -4,7 +4,7 @@ Changelog
 ## 0.1.1 (July 23, 2026)
 
 The baseline entry, added together with the release process. It covers everything published in the repository before
-the changelog was introduced — see the [commit history](https://github.com/ckeditor/skills/commits/main/) for details.
+the changelog was introduced — see the [commit history](https://github.com/ckeditor/skills/commits/master/) for details.
 
 ### Features
 

@@ -15,7 +15,7 @@ import { getGithubToken } from './utils/githubtoken.js';
 import { uploadDiscoveryArtifacts } from './utils/upload.js';
 
 const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
-const RELEASE_BRANCH = 'main';
+const RELEASE_BRANCH = 'master';
 
 const { values: options } = parseArgs( {
 	options: {

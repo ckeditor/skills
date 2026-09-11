@@ -94,7 +94,7 @@ jobs:
           command: >-
             pnpm ckeditor5-dev-ci-trigger-circle-build
             --slug ckeditor/skills
-            --release-branch main
+            --release-branch master
             --pipeline-definition-id cda2f869-539f-4213-94b1-04ac1121597b
       - run:
           name: Enable the redundant workflows option
@@ -114,11 +114,11 @@ jobs:
           command: |
             #!/bin/bash
 
-            CKE5_LATEST_COMMIT_HASH=$( git log -n 1 --pretty=format:%H origin/main )
+            CKE5_LATEST_COMMIT_HASH=$( git log -n 1 --pretty=format:%H origin/master )
             CKE5_TRIGGER_COMMIT_HASH=<< pipeline.parameters.triggerCommitHash >>
 
             if [[ "${CKE5_LATEST_COMMIT_HASH}" != "${CKE5_TRIGGER_COMMIT_HASH}" ]]; then
-              echo "There is a newer commit in the repository on the \`#main\` branch. Use its build to start the release."
+              echo "There is a newer commit in the repository on the \`#master\` branch. Use its build to start the release."
               circleci-agent step halt
             fi
       - git_credentials_command
@@ -174,7 +174,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - master
 
   release:
     when: << pipeline.parameters.isRelease >>
