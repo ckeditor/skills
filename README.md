@@ -51,13 +51,21 @@ skills/ckeditor/
     ├── gotchas.md                # universal gotchas, "don'ts," troubleshooting
     ├── documentation-access.md   # doc sources: Kapa MCP, docs site, llms-full.txt, TypeScript types, llms.txt
     └── skill-feedback.md         # how to report wrong/missing guidance
+skills/ckeditor-v49-migration/
+├── SKILL.md                      # router for the v49 breaking changes
+└── references/
+    └── watchdog-migration.md     # moving off the removed Watchdog, in each integration
 .claude-plugin/                   # Claude Code plugin + marketplace manifests
 .github/ISSUE_TEMPLATE/           # skill-feedback issue form
 scripts/                          # scripts behind the release process
 ```
 
-The skill is **version-agnostic by design**: it carries durable, universal
-knowledge and points the agent at the live docs for anything version-specific.
+The `ckeditor` skill is **version-agnostic by design**: it carries durable,
+universal knowledge and points the agent at the live docs for anything
+version-specific.
+
+A migration skill is about one release. It explains what that release changed
+and how to move a project onto it, from any earlier version.
 
 ## Staying current
 

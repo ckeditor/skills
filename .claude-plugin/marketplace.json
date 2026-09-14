@@ -12,7 +12,7 @@
     {
       "name": "ckeditor",
       "source": "./",
-      "description": "Install, configure, and integrate CKEditor 5 (free and premium) in any JavaScript project.",
+      "description": "Install, configure, integrate, and upgrade CKEditor 5 (free and premium) in any JavaScript project.",
       "version": "0.1.1",
       "author": {
         "name": "CKEditor (CKSource)",
