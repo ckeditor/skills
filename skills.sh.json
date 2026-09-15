@@ -8,6 +8,13 @@
       "skills": [
         "ckeditor"
       ]
+    },
+    {
+      "title": "migration",
+      "description": "Move a project onto a new CKEditor 5 major and resolve compatibility issues introduced by the upgrade.",
+      "skills": [
+        "ckeditor-v49-migration"
+      ]
     }
   ]
 }
