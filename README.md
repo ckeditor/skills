@@ -11,6 +11,13 @@ framework wrapper), configuring features, loading CSS, setting the license key,
 and unlocking premium features. It's an **umbrella router**: it detects the
 project's state and routes to the right path, in any JavaScript environment.
 
+The second skill, **`ckeditor-update`**, updates an **existing** CKEditor 5
+integration from one version to another — including legacy setups such as
+predefined builds. It walks the official update guide of every major version in
+the range, applies the breaking changes in code (not only in `package.json`),
+keeps every feature the editor had, verifies the result, and reports each change
+with the guide section that required it.
+
 > [!NOTE]
 > **Want a skill for something else with CKEditor?** This repo is meant to grow
 > beyond install + configure. If you'd like a skill for a specific feature,
@@ -32,11 +39,12 @@ npx skills add ckeditor/skills
 /plugin install ckeditor@ckeditor
 ```
 
-**Manual:** copy `skills/ckeditor/` into your agent's skills directory (e.g.
-`.claude/skills/ckeditor/`).
+**Manual:** copy `skills/ckeditor/` (and `skills/ckeditor-update/`) into your
+agent's skills directory (e.g. `.claude/skills/ckeditor/`).
 
-Once installed, the skill loads automatically when you ask your agent to install,
-set up, configure, or troubleshoot CKEditor.
+Once installed, the skills load automatically: `ckeditor` when you ask your
+agent to install, set up, configure, or troubleshoot CKEditor, and
+`ckeditor-update` when you ask it to update CKEditor to a newer version.
 
 ## What's in here
 
@@ -50,6 +58,11 @@ skills/ckeditor/
     ├── licensing.md              # free/GPL, commercial keys, premium, trial/portal
     ├── gotchas.md                # universal gotchas, "don'ts," troubleshooting
     ├── documentation-access.md   # doc sources: Kapa MCP, docs site, llms-full.txt, TypeScript types, llms.txt
+    └── skill-feedback.md         # how to report wrong/missing guidance
+skills/ckeditor-update/
+├── SKILL.md                      # migration workflow: detect → route → walk guides → apply → verify → report
+└── references/
+    ├── documentation-access.md   # update guides, migration guides, changelog, LTS policy URLs
     └── skill-feedback.md         # how to report wrong/missing guidance
 .claude-plugin/                   # Claude Code plugin + marketplace manifests
 .github/ISSUE_TEMPLATE/           # skill-feedback issue form

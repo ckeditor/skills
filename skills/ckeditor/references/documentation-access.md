@@ -46,7 +46,7 @@ above) to the project's version:
 **Kapa and `llms-full.txt` cover the latest docs only** — for LTS or a pinned
 version, use the versioned docs-site URLs above. Recommend upgrading to latest
 where feasible; cross-version upgrades and breaking-change fixes are **out of
-scope** for this skill.
+scope** for this skill (the `ckeditor-update` skill covers them).
 
 ## Kapa documentation MCP (optional)
 
