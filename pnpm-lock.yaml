@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@ckeditor/ckeditor5-dev-bump-year':
+        specifier: ^62.0.0
+        version: 62.0.0
       '@ckeditor/ckeditor5-dev-changelog':
         specifier: ^62.0.0
         version: 62.0.0(@types/node@26.1.1)
@@ -38,6 +41,10 @@ packages:
   '@11ty/gray-matter@2.1.0':
     resolution: {integrity: sha512-fNdBOb3MgDz/1UCIoeY4wDuGbp+/3s5y6UrsyfMabECbh/CVycj7Er33JXqSxRwxrRKXcGE1Jipuq/1mODInsQ==}
     engines: {node: '>=11'}
+
+  '@ckeditor/ckeditor5-dev-bump-year@62.0.0':
+    resolution: {integrity: sha512-FapvJl1A3SQGcpcGlvk+Cd7gkmsqrpyQI+BdtaunoIw9nr8WOvE2AvxWAHsh/GU6Ps+k1Uyj9lfT8u3TNNPSqg==}
+    engines: {node: '>=24.11.0', npm: '>=5.7.1'}
 
   '@ckeditor/ckeditor5-dev-changelog@62.0.0':
     resolution: {integrity: sha512-E/uET/4gSwB00AUbckUKyiXA2Fop24YQru4NTurfN+Cb3X5CEpJb+m56DRvRRSVk1kP08gfenirfZbpXJSV9Yw==}
@@ -1548,6 +1555,10 @@ snapshots:
     dependencies:
       js-yaml: 4.3.2
       section-matter: 1.0.0
+
+  '@ckeditor/ckeditor5-dev-bump-year@62.0.0':
+    dependencies:
+      glob: 13.0.6
 
   '@ckeditor/ckeditor5-dev-changelog@62.0.0(@types/node@26.1.1)':
     dependencies:
