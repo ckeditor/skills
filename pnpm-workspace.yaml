@@ -3,3 +3,6 @@ minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
   - '@ckeditor/*'
   - '@cksource/*'
+# Snyk comes with `@ckeditor/ckeditor5-dev-ci`, but nothing in this repository uses it, so its post-install script is denied.
+allowBuilds:
+  snyk: false

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * @license Copyright (c) 2026, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2026-2026, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md.
  */
 
@@ -15,7 +15,7 @@ import { getMetadataVersion, isMetadataFile, updateMetadataVersions } from './ut
 import { prepareDiscoveryArtifacts } from './utils/discoveryartifacts.js';
 
 const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
-const RELEASE_BRANCH = 'main';
+const RELEASE_BRANCH = 'master';
 
 const { values: options } = parseArgs( {
 	options: {
