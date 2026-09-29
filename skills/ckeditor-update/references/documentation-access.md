@@ -25,7 +25,13 @@ Use these guides for legacy setups.
 
 Use the release notes for releases that the update guides do not cover yet. You can also use them to find the exact change behind a guide entry.
 
-- The release notes of one release: `https://github.com/ckeditor/ckeditor5/releases/tag/v{VERSION}`. With the GitHub CLI, run `gh release view v{VERSION} --repo ckeditor/ckeditor5`. The breaking changes are in the `MAJOR BREAKING CHANGES` and `MINOR BREAKING CHANGES` sections.
+- The release notes of one release. Get them from the GitHub REST API with `curl`. The API does not need a login, and the `body` field has the release notes as markdown:
+
+	```bash
+	curl -s https://api.github.com/repos/ckeditor/ckeditor5/releases/tags/v{VERSION}
+	```
+
+	The breaking changes are in the `MAJOR BREAKING CHANGES` and `MINOR BREAKING CHANGES` sections. Without a login, the API allows 60 requests per hour. If the GitHub CLI is installed and logged in, you can use `gh release view v{VERSION} --repo ckeditor/ckeditor5` instead. The GitHub CLI is optional. Do not install it for this task.
 - Do not use `CHANGELOG.md` in the `ckeditor/ckeditor5` repository for this. It has only the latest releases, so it can miss releases in the range.
 - The framework wrappers: each wrapper has a changelog in its repository (`ckeditor/ckeditor5-react`, `ckeditor/ckeditor5-vue`, and `ckeditor/ckeditor5-angular`). To see which editor versions a wrapper supports, run `npm view <wrapper>@<version> peerDependencies`.
 
