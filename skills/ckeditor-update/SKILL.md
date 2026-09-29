@@ -75,7 +75,13 @@ Before you install the target, check its license rules in the versioning policy.
 
 If the project uses npm, CDN, or ZIP, go to step 4.
 
-If the project uses a legacy method, first read the guide about the migration to the new installation methods for that method. Then read the update guides. Read both before you edit the code, and make the two changes as one change set.
+If the project uses a legacy method, read the guide about the migration to the new installation methods first. It shows which versions support each legacy method and from which version the new methods exist. Compare this with the target version:
+
+1. If the target does not support the new methods yet, keep the legacy method and go to step 4. If the user wants the new methods, propose a newer target and ask the user to approve it.
+2. If the target supports the legacy method of the project, keep it and go to step 4. Tell the user that the method is deprecated, and offer the migration.
+3. If the target does not support the legacy method of the project, migrate to the new installation methods. Read the migration guide for that method and the update guides before you edit the code. Make the two changes as one change set.
+
+The rest of this step applies when you migrate a legacy method.
 
 A legacy predefined build includes many features that the configuration does not name. The migration guide shows the plugin list that is equal to each old build. Start the new plugin list from it, and compare it with the baseline from step 1. Keep every feature. Remove a feature only when the user confirms that the project does not use it. A plugin list that is too short looks correct in the browser, but it makes editing worse without an error.
 
