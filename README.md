@@ -62,7 +62,7 @@ skills/ckeditor/
 skills/ckeditor-update/
 ├── SKILL.md                      # migration workflow: detect → route → walk guides → apply → verify → report
 └── references/
-    ├── documentation-access.md   # update guides, migration guides, changelog, LTS policy URLs
+    ├── documentation-access.md   # update guides, migration guides, release notes, LTS policy URLs
     └── skill-feedback.md         # how to report wrong/missing guidance
 .claude-plugin/                   # Claude Code plugin + marketplace manifests
 .github/ISSUE_TEMPLATE/           # skill-feedback issue form
