@@ -21,12 +21,12 @@ Use these guides for legacy setups.
 - One guide for each method, in the same directory: `predefined-builds.html`, `customized-builds.html`, `dll-builds.html`, `online-builder.html`, and `custom-plugins.html`. The predefined builds guide shows the plugin list and the toolbar that are equal to each old build. Start the new plugin list from it.
 - The tables of renamed imports, for `does not provide an export named …` errors: `migrating-imports.html` in the same directory.
 
-## Changelog and release notes
+## Release notes
 
-Use these sources for releases that the update guides do not cover yet. You can also use them to find the exact change behind a guide entry.
+Use the release notes for releases that the update guides do not cover yet. You can also use them to find the exact change behind a guide entry.
 
-- The release notes of one release: `https://github.com/ckeditor/ckeditor5/releases/tag/v{VERSION}`. Use them first, because each page covers only one release. The breaking changes are in the `MAJOR BREAKING CHANGES` and `MINOR BREAKING CHANGES` sections. With the GitHub CLI, run `gh release view v{VERSION} --repo ckeditor/ckeditor5`.
-- The changelog: <https://github.com/ckeditor/ckeditor5/blob/stable/CHANGELOG.md>. The raw file is <https://raw.githubusercontent.com/ckeditor/ckeditor5/stable/CHANGELOG.md>. It has the notes of all releases in one file. The file is very large, so search it with a sub-agent, and use it only when you cannot read the release notes.
+- The release notes of one release: `https://github.com/ckeditor/ckeditor5/releases/tag/v{VERSION}`. With the GitHub CLI, run `gh release view v{VERSION} --repo ckeditor/ckeditor5`. The breaking changes are in the `MAJOR BREAKING CHANGES` and `MINOR BREAKING CHANGES` sections.
+- Do not use `CHANGELOG.md` in the `ckeditor/ckeditor5` repository for this. It has only the latest releases, so it can miss releases in the range.
 - The framework wrappers: each wrapper has a changelog in its repository (`ckeditor/ckeditor5-react`, `ckeditor/ckeditor5-vue`, and `ckeditor/ckeditor5-angular`). To see which editor versions a wrapper supports, run `npm view <wrapper>@<version> peerDependencies`.
 
 ## Policies

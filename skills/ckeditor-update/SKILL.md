@@ -147,7 +147,7 @@ Each CKEditor error has a code, for example `ckeditor-duplicated-modules`. The e
 
 ## References
 
-- `references/documentation-access.md` has the URLs of the update guides, the guides about the migration to the new installation methods, the changelog, and the versioning policy.
+- `references/documentation-access.md` has the URLs of the update guides, the guides about the migration to the new installation methods, the release notes, and the versioning policy.
 - `references/skill-feedback.md` explains how to report wrong or missing guidance.
 
 ## Feedback
