@@ -23,10 +23,10 @@ Use these guides for legacy setups.
 
 ## Changelog and release notes
 
-Use these sources for versions that the update guide does not cover yet. You can also use them to find the exact change behind a guide entry.
+Use these sources for releases that the update guides do not cover yet. You can also use them to find the exact change behind a guide entry.
 
-- The changelog: <https://github.com/ckeditor/ckeditor5/blob/stable/CHANGELOG.md>. The raw file is <https://raw.githubusercontent.com/ckeditor/ckeditor5/stable/CHANGELOG.md>. The file is very large, so search it with a sub-agent.
-- The release notes: `https://github.com/ckeditor/ckeditor5/releases/tag/v{VERSION}`
+- The release notes of one release: `https://github.com/ckeditor/ckeditor5/releases/tag/v{VERSION}`. Use them first, because each page covers only one release. The breaking changes are in the `MAJOR BREAKING CHANGES` and `MINOR BREAKING CHANGES` sections. With the GitHub CLI, run `gh release view v{VERSION} --repo ckeditor/ckeditor5`.
+- The changelog: <https://github.com/ckeditor/ckeditor5/blob/stable/CHANGELOG.md>. The raw file is <https://raw.githubusercontent.com/ckeditor/ckeditor5/stable/CHANGELOG.md>. It has the same content for all releases. The file is very large, so search it with a sub-agent, and use it only when you cannot read the release notes.
 - The framework wrappers: each wrapper has a changelog in its repository (`ckeditor/ckeditor5-react`, `ckeditor/ckeditor5-vue`, and `ckeditor/ckeditor5-angular`). To see which editor versions a wrapper supports, run `npm view <wrapper>@<version> peerDependencies`.
 
 ## Policies

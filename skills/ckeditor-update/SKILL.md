@@ -89,7 +89,7 @@ The license key must match the distribution channel. A self-hosted key does not 
 
 ### 4. Read the guides, one after another
 
-The range is every release that is newer than the installed version and not newer than the target. For each major version in the range, read `update-to-{N}`, from the oldest to the newest. Start with the guide of the installed major version. In each guide, read the section of every release in the range. The guide of the target major version can end before the target version. In that case, read the changelog for the missing versions.
+The range is every release that is newer than the installed version and not newer than the target. For each major version in the range, read `update-to-{N}`, from the oldest to the newest. Start with the guide of the installed major version. In each guide, read the section of every release in the range. A guide can end before the target version, or it can skip a release in the range. Do not ignore these releases. For each release in the range without a section in a guide, read its release notes: `https://github.com/ckeditor/ckeditor5/releases/tag/v{VERSION}`. Read the `MAJOR BREAKING CHANGES` and `MINOR BREAKING CHANGES` sections, and search the whole release notes for deprecations. If a release has none of these, you can skip it. Add the entries that you find to the same checklist. A breaking change that is in the release notes but not in a guide is a gap in the guide. Name it in the report.
 
 Before you edit the code, make a checklist. Give each guide entry one of these two marks:
 
