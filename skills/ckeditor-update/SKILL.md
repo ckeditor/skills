@@ -67,7 +67,21 @@ If the editor does not start, for example after an earlier failed update, you ca
 
 ### 2. Choose the target version
 
-If the user names a target version, use it. If not, use the latest stable version (`npm view ckeditor5 version`). Never downgrade. If the target is older than the installed version, stop and ask the user.
+First, find out what the user wants to achieve. Do not guess the target.
+
+- If the user names a target version, or asks for the latest version, use it.
+- If the user wants to fix errors after an earlier update, the target is the version that the project already declares.
+- In all other cases, you do not know the intent. For example, the user starts the skill with no text, or asks only to "update CKEditor". Then ask the user before you continue.
+
+When you ask, give the facts that help the user decide:
+
+- the installed version (from step 1),
+- the latest stable version (`npm view ckeditor5 version`),
+- the latest release of the installed major version (`npm view ckeditor5@<installed-major> version`), if it is newer than the installed version.
+
+Check the license rules (see below) for each version that you suggest. For example, the latest release of a major version can need an LTS license. Then ask if the user wants the latest version or a different one. Ask one question, and wait for the answer. If you cannot ask the user, for example in a run without a user, use the latest stable version and say so in the report.
+
+Never downgrade. If the target is older than the installed version, stop and ask the user.
 
 Before you install the target, check its license rules in the versioning policy. Some release lines are Long-term Support (LTS) editions. Their later patches need a commercial LTS license, and with `licenseKey: 'GPL'` they fail at runtime. If the target is such a patch and the user does not have an LTS license, tell the user. Then propose the nearest version that they can use. The best option is usually the next regular major version.
 
