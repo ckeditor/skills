@@ -8,3 +8,4 @@ allowBuilds:
   snyk: false
 
 autoDedupe: true
+verifyDepsBeforeRun: false
