@@ -11,7 +11,7 @@ Return every entry in these sections. An entry is each change that the text desc
 
 The project installs these packages: <installed CKEditor packages from the "Find the current state" step, for example "ckeditor5 only, no ckeditor5-premium-features">. It uses these plugins, config keys, and custom code: <plugins, config keys, custom plugins, converters, and CSS overrides from the "Find the current state" step>.
 
-Return every entry that mentions one of them in full. For every other entry, return one line: the release, the section heading, and the exact names in it.
+Return every entry that mentions one of them in full. For every other entry, return one line: the release, the section heading, one sentence that says what changed, and the exact names in it. Return every entry that mentions no names in full.
 
 For each entry in full, return:
 - the release and the section heading,
