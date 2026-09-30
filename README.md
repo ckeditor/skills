@@ -71,7 +71,7 @@ scripts/                          # scripts behind the release process
 ```
 
 The skills are **version-agnostic by design**: they carry durable, universal
-knowledge and points the agent at the live docs for anything version-specific.
+knowledge and point the agent at the live docs for anything version-specific.
 
 ## Staying current
 
