@@ -10,7 +10,7 @@ These guides are the main source.
 
 - The index of the updating section. Start here: <https://ckeditor.com/docs/ckeditor5/latest/updating/index.html>
 - The general update process: <https://ckeditor.com/docs/ckeditor5/latest/updating/guides/updating-ckeditor-5.html>
-- One guide for each major version, with a section for each minor release: `https://ckeditor.com/docs/ckeditor5/latest/updating/guides/update-to-{N}.html`. For example, `update-to-48`.
+- One guide for each major version, with sections only for the releases that need attention: `https://ckeditor.com/docs/ckeditor5/latest/updating/guides/update-to-{N}.html`. For example, `update-to-48`.
 - The `latest` docs do not list the guides of old major versions. This page links to the docs that still have them: <https://ckeditor.com/docs/ckeditor5/latest/updating/guides/updating-from-older-versions.html>
 
 ## Migration to the new installation methods

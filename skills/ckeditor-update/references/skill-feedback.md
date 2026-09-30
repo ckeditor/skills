@@ -5,7 +5,7 @@ The maintainers improve this skill over time. Open an issue in these cases:
 - The guidance of the skill is wrong, or it is different from what worked.
 - A rule is out of date and does not match how the editor updates now.
 - Something important is missing, for example an update path, an installation method, or a known problem.
-- An update guide did not mention a change that you had to make. Name the guide and the change.
+- An update guide did not mention a change, and the skill should handle it until the guide is fixed.
 
 ## Where to report
 
@@ -24,7 +24,7 @@ Keep the report short and specific:
 ## What not to report here
 
 - Report bugs in CKEditor to the product repositories: `ckeditor/ckeditor5`, or the repository of the related integration.
-- Report mistakes in an update guide to the `ckeditor/ckeditor5` repository. The guides are in its `docs/` directory.
+- Report mistakes and gaps in an update guide, for example a change that the guide did not mention, to `ckeditor/ckeditor5`. Name the guide and the change. The guides are in its `docs/updating/` directory.
 - Send questions about accounts, licenses, or billing to the Customer Portal and to CKEditor support.
 
 Do not open an issue without the user's knowledge. An issue is public. Show the user what you want to report, and let them confirm it first.
