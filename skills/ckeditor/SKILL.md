@@ -37,9 +37,10 @@ license key, starting a trial, unlocking premium features, or fixing a setup
 error.
 
 **Do NOT apply** for: authoring custom CKEditor plugins or features; upgrading
-the editor between versions or fixing breaking changes; migrating from another
-editor; or **CKEditor 4** (a different, end-of-life product). These are out of
-scope — say so and stop, or hand off.
+the editor between versions or fixing breaking changes (hand off to the
+`ckeditor-update` skill); migrating from another editor; or **CKEditor 4** (a
+different, end-of-life product). These are out of scope — say so and stop, or
+hand off.
 
 ## Work from the live docs, not memory
 
@@ -60,7 +61,7 @@ each source is best at and how to set them up.
 > non-latest use is rare. For a pinned older version or the **LTS** edition, route
 > to the versioned docs (Kapa and `llms-full.txt` are latest-only) — see version
 > routing in `references/documentation-access.md`. Upgrades and breaking-change
-> fixes are out of scope.
+> fixes are out of scope — use the `ckeditor-update` skill.
 
 ## Decision router
 

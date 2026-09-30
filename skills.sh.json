@@ -8,6 +8,13 @@
       "skills": [
         "ckeditor"
       ]
+    },
+    {
+      "title": "update",
+      "description": "Update an existing CKEditor 5 integration between versions and apply the breaking changes.",
+      "skills": [
+        "ckeditor-update"
+      ]
     }
   ]
 }
