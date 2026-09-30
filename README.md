@@ -70,12 +70,12 @@ skills/ckeditor-update/
 scripts/                          # scripts behind the release process
 ```
 
-The skill is **version-agnostic by design**: it carries durable, universal
+The skills are **version-agnostic by design**: they carry durable, universal
 knowledge and points the agent at the live docs for anything version-specific.
 
 ## Staying current
 
-The skill works standalone, but is more effective with live docs access:
+The skills work standalone, but are more effective with live docs access:
 
 - **Docs:** <https://ckeditor.com/docs/ckeditor5/latest/>
 - **`llms-full.txt`** (<https://ckeditor.com/docs/llms-full.txt>) — the guides as
@@ -90,7 +90,7 @@ The skill works standalone, but is more effective with live docs access:
 Found wrong, stale, or missing guidance? [Open an
 issue](https://github.com/ckeditor/skills/issues/new?template=skill-feedback.yml)
 with the **skill feedback** template. Agents are encouraged to file these (with
-the user's awareness) when reality contradicts the skill.
+the user's awareness) when reality contradicts a skill.
 
 ## License
 

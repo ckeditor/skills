@@ -16,6 +16,8 @@ allowed-tools:
   - Bash
   - Glob
   - Grep
+  - WebFetch
+  - Agent
 metadata:
   author: CKEditor (CKSource)
   version: 0.1.1
