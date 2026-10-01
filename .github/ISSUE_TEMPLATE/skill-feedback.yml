@@ -1,15 +1,24 @@
 name: Skill feedback
-description: Report wrong, stale, or missing guidance in the CKEditor skill (usually filed by an AI agent).
+description: Report wrong, stale, or missing guidance in a CKEditor skill (usually filed by an AI agent).
 title: "[skill] "
 labels: ["skill-feedback"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for improving the CKEditor skill. Please keep it concrete so it's actionable.
+        Thanks for improving the CKEditor skills. Please keep it concrete so it's actionable.
 
         For **CKEditor product bugs** use `ckeditor/ckeditor5` (or the relevant integration repo);
         for **account / license / billing** use the [Customer Portal](https://portal.ckeditor.com/) and support — not this repo.
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Skill
+      options:
+        - ckeditor
+        - ckeditor-update
+    validations:
+      required: true
   - type: dropdown
     id: kind
     attributes:
