@@ -14,9 +14,9 @@ const TRACKING_PARAMETERS = {
 	utm_medium: 'ai-agent'
 };
 
-// A docs URL runs until whitespace or until the character that closes an autolink (`>`),
-// an inline link (`)`), or a code span (`` ` ``). The skills do not use bare URLs.
-const DOCS_URL_PATTERN = /https?:\/\/ckeditor\.com\/docs[^\s>)`]*/g;
+// A docs URL runs until whitespace or until a character that ends it in markdown: `>` of an autolink,
+// `)` of an inline link, `]` of a link text, `(` after it, or a backtick of a code span. The skills do not use bare URLs.
+const DOCS_URL_PATTERN = /https?:\/\/ckeditor\.com\/docs[^\s>)\]`(]*/g;
 
 const skillFiles = readdirSync( 'skills', { recursive: true, withFileTypes: true } )
 	.filter( entry => entry.isFile() && entry.name.endsWith( '.md' ) )
