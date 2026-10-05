@@ -23,9 +23,9 @@ table feature, tables are dropped on load/paste. Fix order:
 1. **Load the dedicated feature** for that content (the right answer most of the
    time).
 2. Backup: **General HTML Support (GHS)** to retain arbitrary markup
-   (<https://ckeditor.com/docs/ckeditor5/latest/features/html/general-html-support.html>),
+   (<https://ckeditor.com/docs/ckeditor5/latest/features/html/general-html-support.html?utm_source=ckeditor-skill&utm_medium=ai-agent>),
    or **HTML embed** for raw HTML blocks
-   (<https://ckeditor.com/docs/ckeditor5/latest/features/html/html-embed.html>).
+   (<https://ckeditor.com/docs/ckeditor5/latest/features/html/html-embed.html?utm_source=ckeditor-skill&utm_medium=ai-agent>).
 
 ## Don'ts — stale patterns LLMs were trained on
 
@@ -46,7 +46,7 @@ suggest them confidently — **actively steer away.**
 
 CKEditor errors carry a **code** (e.g. `ckeditor-duplicated-modules`) with a
 fuller explanation on the **error-codes page**:
-<https://ckeditor.com/docs/ckeditor5/latest/support/error-codes.html>. To
+<https://ckeditor.com/docs/ckeditor5/latest/support/error-codes.html?utm_source=ckeditor-skill&utm_medium=ai-agent>. To
 live-debug in a real browser, drive it with the **Playwright MCP** or the
 **Chrome DevTools MCP** — inspect the editor instance, DOM, and console while
 reproducing the issue.

@@ -1,9 +1,11 @@
 # Prompt for a guide-reader sub-agent
 
-Give each update guide to a sub-agent with this prompt. You can give the release notes of several releases to one sub-agent. Replace the values in angle brackets. The same prompt gives the same shape of output in every run, so you can merge the results into one checklist.
+Give each update guide to a sub-agent with this prompt. You can give the release notes of several releases to one sub-agent. Replace the values in angle brackets. Give the sub-agent docs URLs with the tracking parameters (see `documentation-access.md`). The same prompt gives the same shape of output in every run, so you can merge the results into one checklist.
 
 ```text
 Read <URL of the guide, or the URLs of the release notes>. Only read. Do not edit, create, or delete any file, and do not run commands that change the project.
+
+Add ?utm_source=ckeditor-skill&utm_medium=ai-agent to every ckeditor.com/docs URL that you fetch, before any #fragment. The URLs that you receive have it. Keep it when you change .html to .md, and add it to every other docs page that you open.
 
 Read only the sections of these releases: <list of releases in the range>.
 
