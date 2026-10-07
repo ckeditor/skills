@@ -9,7 +9,7 @@
 The editor type is chosen in the core workflow (`SKILL.md`) — it determines the
 editor class (`ClassicEditor`, `InlineEditor`, `BalloonEditor`, `DecoupledEditor`,
 or a multi-root editor). See the
-[editor types guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/editor-types.html)
+[editor types guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/editor-types.html?utm_source=ckeditor-skill&utm_medium=ai-agent)
 for the exact setup of each.
 
 Two of them need extra manual wiring beyond `create()`:
@@ -36,9 +36,9 @@ the old, **deprecated** form that pre-v48 models will reach for. Don't.
   `placeholder`, `label` → `config.root.*`.
 
 Look up the exact per-type keys in the
-[root types guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/root-types.html)
+[root types guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/root-types.html?utm_source=ckeditor-skill&utm_medium=ai-agent)
 and the
-[v48 migration guide](https://ckeditor.com/docs/ckeditor5/latest/updating/guides/update-to-48.html#root-configuration-migration-and-deprecated-top-level-options).
+[v48 migration guide](https://ckeditor.com/docs/ckeditor5/latest/updating/guides/update-to-48.html?utm_source=ckeditor-skill&utm_medium=ai-agent#root-configuration-migration-and-deprecated-top-level-options).
 
 ## Features: plugins, toolbar, and menu bar
 
@@ -52,7 +52,7 @@ other plugins (for example lists, images, tables pull in helpers).
 `Essentials` (undo/redo, typing, enter, clipboard, etc.) and `Paragraph` are the
 near-universal baseline. Look up exact plugin and button names in the docs.
 
-The [toolbar guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/toolbar.html)
+The [toolbar guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/toolbar.html?utm_source=ckeditor-skill&utm_medium=ai-agent)
 has crucial setup detail — item grouping, line wrapping, nested/grouped
 dropdowns, separators, and the full item list. **Tip:**
 `Array.from( editor.ui.componentFactory.names() )` returns every toolbar
@@ -68,7 +68,7 @@ You only turn it on:
 - **Other editor types:** inject `editor.ui.view.menuBarView.element` into the
   DOM yourself.
 
-See the [menu bar guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/menubar.html)
+See the [menu bar guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/menubar.html?utm_source=ckeditor-skill&utm_medium=ai-agent)
 for details. Recommend the menu bar in **richer setups** (for example Word-like
 applications), where the many available buttons would not all fit in the main
 toolbar.
@@ -84,7 +84,7 @@ Two things must happen or the editor/content "looks broken":
    content styles are scoped to `.ck-content`; without that class, published
    content won't match what was authored.
 
-Styles guide: <https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/css.html>.
+Styles guide: <https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/css.html?utm_source=ckeditor-skill&utm_medium=ai-agent>.
 Customizing the editor's look is done with CSS variables / overrides — see the
 docs; don't fork the bundled CSS.
 
@@ -118,7 +118,7 @@ mistake is **how translations are loaded**, and it differs by channel:
 - **CDN** — translations are **auto-loaded** from the cloud; don't import them.
 
 Language guide:
-<https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/ui-language.html>.
+<https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/ui-language.html?utm_source=ckeditor-skill&utm_medium=ai-agent>.
 
 ## TypeScript
 
@@ -131,9 +131,9 @@ JSDoc comments, so you can read API documentation straight from the declarations
 In CSP-restricted apps, the editor (and the cloud license check, for cloud/CDN
 distributions) needs a minimal policy. Be aware it's required; look up the exact
 directives in the docs:
-<https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/csp.html>.
+<https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/csp.html?utm_source=ckeditor-skill&utm_medium=ai-agent>.
 
 ## Customizing icons (optional)
 
 Icons can be customized in self-hosted setups. Mention it's possible and point to
-<https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/customizing-icons.html>.
+<https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/customizing-icons.html?utm_source=ckeditor-skill&utm_medium=ai-agent>.

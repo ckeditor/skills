@@ -1,4 +1,4 @@
-name: Skill feedback
+name: "💬 Skill feedback"
 description: Report wrong, stale, or missing guidance in a CKEditor skill (usually filed by an AI agent).
 title: "[skill] "
 labels: ["skill-feedback"]

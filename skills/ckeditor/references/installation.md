@@ -1,7 +1,7 @@
 # Installation methods
 
 > Look up exact version numbers, current feature lists, and config keys in the
-> live docs (Kapa MCP / `llms-full.txt` / <https://ckeditor.com/docs/ckeditor5/latest/>).
+> live docs (Kapa MCP / `llms-full.txt` / <https://ckeditor.com/docs/ckeditor5/latest/index.html?utm_source=ckeditor-skill&utm_medium=ai-agent>).
 > This file carries the **durable** choices and shapes only.
 
 ## The single-package model (current)

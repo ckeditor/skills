@@ -10,21 +10,27 @@ If your PR is internal-only (tests, tooling, CI), skip this step and mention it 
 
 -->
 
-### Summary
+### 🚀 Summary
 
 *A brief summary of what this PR changes.*
 
-### Related issues
+---
+
+### 📌 Related issues
 
 <!-- GitHub needs the issues listed here to link and close them automatically. -->
 
 * Closes #000
 
-### Notes
+---
+
+### 💡 Additional information
 
 *Optional: decisions, edge cases, or anything helpful for reviewers.*
 
-### Checklists
+---
+
+### 🧾 Checklists
 
 If an item is **not relevant** to this change, leave it unchecked.
 
