@@ -17,7 +17,7 @@ commands:
     steps:
       - run:
           name: Install pnpm
-          command: sudo npm i -g pnpm@11.14.0
+          command: sudo npm i -g pnpm@12.8.2
       - run:
           name: Install dependencies
           command: pnpm install --frozen-lockfile
