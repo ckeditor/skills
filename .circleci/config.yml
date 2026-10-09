@@ -16,9 +16,6 @@ commands:
     description: "Install pnpm and the dependencies"
     steps:
       - run:
-          name: Disable Corepack
-          command: sudo corepack disable
-      - run:
           name: Install pnpm
           command: sudo npm i -g pnpm@12.8.2
       - run:
@@ -51,7 +48,7 @@ commands:
 jobs:
   tests:
     docker:
-      - image: cimg/node:24.11.0
+      - image: cimg/node:26.10.0
     resource_class: small
     steps:
       - checkout
@@ -65,7 +62,7 @@ jobs:
 
   trigger_release_process:
     docker:
-      - image: cimg/node:24.11.0
+      - image: cimg/node:26.10.0
     resource_class: small
     steps:
       - checkout
@@ -103,7 +100,7 @@ jobs:
 
   release_project:
     docker:
-      - image: cimg/node:24.11.0
+      - image: cimg/node:26.10.0
     resource_class: small
     steps:
       - checkout
