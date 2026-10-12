@@ -47,6 +47,7 @@ commands:
             git config --global user.signingkey 3F615B600F38B27B
             git config --global commit.gpgsign true
             git config --global tag.gpgSign true
+            git remote set-url origin git@github.com:ckeditor/skills.git
 
 jobs:
   tests:
@@ -107,7 +108,9 @@ jobs:
     resource_class: small
     steps:
       - checkout
-      - add_ssh_keys
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:13DTiRObrC0vEICSdjNtRrjn7NfaEl0Yd/g/u70vewM"
       - bootstrap_repository_command
       - run:
           name: Verify the trigger commit from the repository
