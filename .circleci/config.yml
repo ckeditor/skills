@@ -22,6 +22,13 @@ commands:
           name: Install dependencies
           command: pnpm install --frozen-lockfile
 
+  install_ssh_keys_command:
+    description: "Install SSH keys"
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "a0:41:a2:56:c8:7d:3f:29:41:d1:87:92:fd:50:2b:6b"
+
   gpg_credentials_command:
     description: "Setup GPG configuration"
     steps:
@@ -44,6 +51,7 @@ commands:
             git config --global user.signingkey 3F615B600F38B27B
             git config --global commit.gpgsign true
             git config --global tag.gpgSign true
+            git remote set-url origin git@github.com:ckeditor/skills.git
 
 jobs:
   tests:
@@ -104,7 +112,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
-      - add_ssh_keys
+      - install_ssh_keys_command
       - bootstrap_repository_command
       - run:
           name: Verify the trigger commit from the repository
