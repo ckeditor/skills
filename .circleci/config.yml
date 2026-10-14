@@ -28,6 +28,11 @@ commands:
       - add_ssh_keys:
           fingerprints:
             - "a0:41:a2:56:c8:7d:3f:29:41:d1:87:92:fd:50:2b:6b"
+      - run:
+          name: Add GitHub to known_hosts
+          command: |
+            mkdir -p ~/.ssh
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
 
   gpg_credentials_command:
     description: "Setup GPG configuration"
