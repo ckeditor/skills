@@ -57,17 +57,18 @@ skills/ckeditor/
     ├── configuration.md          # editor types, plugins/toolbar, CSS, i18n, TS, CSP
     ├── licensing.md              # free/GPL, commercial keys, premium, trial/portal
     ├── gotchas.md                # universal gotchas, "don'ts," troubleshooting
-    ├── documentation-access.md   # doc sources: Kapa MCP, docs site, llms-full.txt, TypeScript types, llms.txt
+    ├── documentation-access.md   # doc sources (Kapa MCP, docs site, llms-full.txt, TypeScript types, llms.txt) + docs request tags
     └── skill-feedback.md         # how to report wrong/missing guidance
 skills/ckeditor-update/
 ├── SKILL.md                      # migration workflow: detect → route → walk guides → apply → verify → report
 └── references/
-    ├── documentation-access.md   # update guides, migration guides, release notes, LTS policy URLs
+    ├── documentation-access.md   # update guides, migration guides, release notes, LTS policy URLs + docs request tags
     ├── guide-reader-prompt.md    # prompt for the sub-agents that read the guides
     └── skill-feedback.md         # how to report wrong/missing guidance
 .claude-plugin/                   # Claude Code plugin + marketplace manifests
 .github/ISSUE_TEMPLATE/           # skill-feedback issue form
-scripts/                          # scripts behind the release process
+scripts/                          # release process + docs request tags (rule templates, update script)
+tests/                            # tests of the scripts + checks of the docs URLs in the skills
 ```
 
 The skills are **version-agnostic by design**: they carry durable, universal

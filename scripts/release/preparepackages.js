@@ -7,15 +7,12 @@
 
 import { parseArgs } from 'node:util';
 import { Listr } from 'listr2';
-import upath from 'upath';
 import * as releaseTools from '@ckeditor/ckeditor5-dev-release-tools';
+import { RELEASE_BRANCH, ROOT_DIRECTORY } from '../constants.js';
 import { quote } from './utils/assert.js';
 import { findUncommittedFiles } from './utils/git.js';
 import { getMetadataVersion, isMetadataFile, updateMetadataVersions } from './utils/metadataversions.js';
 import { prepareDiscoveryArtifacts } from './utils/discoveryartifacts.js';
-
-const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
-const RELEASE_BRANCH = 'master';
 
 const { values: options } = parseArgs( {
 	options: {

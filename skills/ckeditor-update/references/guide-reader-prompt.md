@@ -5,7 +5,7 @@ Give each update guide to a sub-agent with this prompt. You can give the release
 ```text
 Read <URL of the guide, or the URLs of the release notes>. Only read. Do not edit, create, or delete any file, and do not run commands that change the project.
 
-Add ?utm_source=ckeditor-skill&utm_medium=ai-agent to every ckeditor.com/docs URL that you fetch, before any #fragment. The URLs that you receive have it. Keep it when you change .html to .md, and add it to every other docs page that you open.
+Add ?utm_source=ckeditor-skill&utm_medium=ai-agent&utm_content=ckeditor-update to every ckeditor.com/docs URL that you fetch, before any #fragment. The URLs that you receive have it. Keep it when you change .html to .md, and add it to every other docs page that you open.
 
 Read only the sections of these releases: <list of releases in the range>.
 

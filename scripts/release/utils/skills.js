@@ -5,11 +5,9 @@
 
 import fs from 'node:fs/promises';
 import upath from 'upath';
+import { SKILL_FILE, SKILLS_DIRECTORY } from '../../constants.js';
 import { assert } from './assert.js';
 import { parseFrontMatter } from './frontmatter.js';
-
-export const SKILLS_DIRECTORY = 'skills';
-export const SKILL_FILE = 'SKILL.md';
 
 // The discovery specification constraints for a skill name: lowercase alphanumeric characters and hyphens,
 // with no leading, trailing, or consecutive hyphens.

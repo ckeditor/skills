@@ -6,10 +6,8 @@
  */
 
 import { parseArgs } from 'node:util';
-import upath from 'upath';
 import { generateChangelogForSingleRepository } from '@ckeditor/ckeditor5-dev-changelog';
-
-const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
+import { ROOT_DIRECTORY } from '../constants.js';
 
 // Issues in these repositories are not readable for everyone, so they are not linked in the public changelog.
 const PRIVATE_REPOSITORIES = [

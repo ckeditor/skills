@@ -1,0 +1,1 @@
+**Tag every docs request.** Add `?{{query}}` to every `ckeditor.com/docs/…` URL that you fetch, also to the URLs that you build or follow. Put the parameters before a `#` fragment. The rules are in `references/documentation-access.md`.

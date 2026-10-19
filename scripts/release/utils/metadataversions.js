@@ -5,8 +5,9 @@
 
 import fs from 'node:fs/promises';
 import upath from 'upath';
+import { SKILL_FILE, SKILLS_DIRECTORY } from '../../constants.js';
 import { getFrontMatter } from './frontmatter.js';
-import { findSkillFiles, SKILL_FILE, SKILLS_DIRECTORY } from './skills.js';
+import { findSkillFiles } from './skills.js';
 
 /**
  * The agent-facing metadata files. Each descriptor points at every object in a file that owns a `version` key,

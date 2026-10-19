@@ -5,8 +5,9 @@
 
 import fs from 'node:fs/promises';
 import upath from 'upath';
+import { RELEASE_DIRECTORY } from '../../constants.js';
 import { runCommand } from './command.js';
-import { INDEX_FILE, RELEASE_DIRECTORY, SITE_URL, URL_PREFIX } from './discoveryartifacts.js';
+import { INDEX_FILE, SITE_URL, URL_PREFIX } from './discoveryartifacts.js';
 
 // The archives carry the version in their names, so clients can cache them for a year.
 const ARCHIVE_HEADERS = {
