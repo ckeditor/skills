@@ -9,14 +9,13 @@ import fs from 'node:fs/promises';
 import upath from 'upath';
 import { Octokit } from '@octokit/rest';
 import { getLastFromChangelog } from '@ckeditor/ckeditor5-dev-release-tools';
+import { ROOT_DIRECTORY } from '../constants.js';
 import { getGithubToken } from '../release/utils/githubtoken.js';
 
 // Tells CI whether the changelog announces a version without a GitHub release yet. Exit codes:
 // * 0 when it does,
 // * 1 when there is nothing to release (the CI job then ends quietly),
 // * 2 when the check could not be made.
-
-const ROOT_DIRECTORY = upath.join( import.meta.dirname, '..', '..' );
 
 try {
 	const packageJson = JSON.parse( await fs.readFile( upath.join( ROOT_DIRECTORY, 'package.json' ), 'utf-8' ) );

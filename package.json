@@ -32,6 +32,7 @@
     "release:prepare-changelog": "node ./scripts/release/preparechangelog.js",
     "release:prepare-packages": "node ./scripts/release/preparepackages.js",
     "release:publish-packages": "node ./scripts/release/publishpackages.js",
+    "skills:update-docs-tracking": "node ./scripts/skills/updatedocstracking.js",
     "test": "vitest run",
     "test:watch": "vitest"
   }
