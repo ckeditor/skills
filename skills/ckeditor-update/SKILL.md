@@ -62,16 +62,18 @@ You can find all URLs in `references/documentation-access.md`.
 
 ### 1. Find the current state
 
-Do not change anything in this step.
+Do not change the project in this step.
 
 1. Find the installed version. Read the CKEditor packages in `package.json` and in the lockfile. The range in `package.json` does not show the installed version, but the lockfile does. For CDN setups, read the version in the CDN URLs. At runtime, `window.CKEDITOR_VERSION` shows the version.
 2. Find the installation method. The current methods are npm (imports from `ckeditor5` and `ckeditor5-premium-features`), CDN, and ZIP. The legacy methods are predefined builds (`@ckeditor/ckeditor5-build-*`) and many `@ckeditor/ckeditor5-*` source packages bundled with webpack. DLL builds, Online Builder ZIPs, and the old CDN scripts for each build are legacy methods too.
 3. Find the premium packages and how the project sets the license key.
 4. Find the framework wrappers: `@ckeditor/ckeditor5-react`, `@ckeditor/ckeditor5-vue`, or `@ckeditor/ckeditor5-angular`. They have their own version numbers.
 5. Find the custom code: custom plugins, converters, and CSS that overrides `.ck-*` selectors or `--ck-*` variables.
-6. Write down what the editor does today. This is the feature baseline. Record the features (the loaded plugins, `editor.plugins` at runtime), the toolbar, and a sample of `editor.getData()`. For a predefined build, also record the features that the build includes. In step 6, you compare the result with this baseline.
+6. Record the feature baseline for step 6: the loaded plugins (`editor.plugins`), the rendered toolbar items, and a sample of `editor.getData()` from the existing content. If a browser MCP (for example, Playwright or Chrome DevTools) is available, you must record the baseline in the browser. Do not simulate typing. Get the editor instance from the editable element's `ckeditorInstance` property.
 
-If the editor does not start, for example after an earlier failed update, or if you have no browser, you cannot read the baseline at runtime. In that case, make the baseline from the editor configuration, the tests, and the last working revision in version control. In the report, say which parts of the baseline you confirmed at runtime and which parts you made from the code.
+	Use the project's development server. For static HTML, use an HTTP server, for example `npx --yes http-server . -a 127.0.0.1 -c-1`. If the editor does not open, try to fix it without changing the project, for example install the dependencies without updating the lockfile, or use a free port. If the page needs a login or a running back end, ask the user to log in or to start the back end, and wait. When you have the baseline, stop the server if you started it.
+
+	Make the baseline from the code only if no browser MCP is available or you still cannot open the editor. Then use the editor configuration, the tests, and the last working revision in version control. For a predefined build, also record the features that the build includes.
 
 ### 2. Choose the target version
 
@@ -167,7 +169,7 @@ Do not apply entries without a check. Do not skip entries because they look opti
 	- the editor shows on the page,
 	- the console has no errors and no deprecation warnings. License warnings, for example about a trial or development license, do not block the update. Add them to the report as a task for the user,
 	- `window.CKEDITOR_VERSION` is equal to the target,
-	- the feature baseline from step 1 is still true: the same features, a full toolbar, and equal `editor.getData()` output. A plugin can have a new name or a replacement that the guides document. In that case, compare the feature, not the plugin name.
+	- the feature baseline from step 1 is still true: the same features, the same toolbar items, and equal `editor.getData()` output. A plugin can have a new name or a replacement that the guides document. In that case, compare the feature, not the plugin name.
 
 	The guides can announce changes that make the result different from the baseline, for example new plugins that the editor loads by default or new attributes in the data output. These changes are expected. Do not count them as missing or broken features. If a guide names an option that hides such a change in the data, use it for the comparison. Name every expected change in the report. To check custom CSS, read the computed style. Do not rely on how the page looks.
 3. If you do not have a browser, give the user the list from item 2 and ask them to do the checks.
@@ -181,7 +183,7 @@ At the end, give the user a short report with these parts:
 - The old and the new version, and the new installation method if it changed.
 - Each change, with the file and the guide section (or the `@deprecated` tag) that made it necessary.
 - The guide entries that you marked "not applicable", with the reasons.
-- A statement that the feature baseline is still true, or the list of features that the user agreed to remove. If you made parts of the baseline from the code, say which parts.
+- A statement that the feature baseline is still true, or the list of features that the user agreed to remove. If you made parts of the baseline from the code, say which parts and why.
 - The tasks that are left for the user. Examples are a new license key, license warnings in the console, or data format changes that affect their back end or tests. Include all tasks that the guides mention.
 
 ## Troubleshooting
