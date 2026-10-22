@@ -18,8 +18,8 @@ Add the script to the project, for example as `scripts/check-bundle.mjs`, and ad
 // Then it compares the editor output with the test data.
 //
 // Usage:
-//   node scripts/check-bundle.mjs           Checks test-data/document.html.
-//   node scripts/check-bundle.mjs --write   Makes test-data/document.html from the files in test-data/samples/.
+//   node scripts/check-bundle.mjs           Checks the test data: test-data/document.html, or .json for a multi-root editor.
+//   node scripts/check-bundle.mjs --write   Makes the test data from the files in test-data/samples/.
 //
 // If the editor uses premium features, set a license key for self-hosted installations in the
 // CKEDITOR_CHECK_LICENSE_KEY environment variable. The check runs the npm build, so a key for the CDN does not work.
@@ -47,8 +47,9 @@ const pluginsRemovedByCloudServices = [
 const MARKER_ELEMENTS = /<(comment|suggestion)-(start|end)\b[^>]*><\/\1-\2>/g;
 const MARKER_ATTRIBUTES = / data-(comment|suggestion)-(start|end)-(before|after)="[^"]*"/g;
 
-// For a multi-root editor, the test data is JSON with one entry for each root.
+// For a multi-root editor, the samples and the test data are JSON with one entry for each root.
 const isMultiRoot = false;
+const testDataFile = isMultiRoot ? 'test-data/document.json' : 'test-data/document.html';
 
 const root = new URL( '../', import.meta.url );
 const bundle = await readFile( new URL( 'dist-bundle/editor.bundle.js', root ), 'utf8' );
@@ -94,11 +95,11 @@ try {
 			allowPageErrors: true
 		} );
 
-		await writeFile( new URL( 'test-data/document.html', root ), output );
-		console.log( 'Wrote test-data/document.html. Compare it with the samples.' );
+		await writeFile( new URL( testDataFile, root ), output );
+		console.log( `Wrote ${ testDataFile }. Compare it with the samples.` );
 	} else {
 		// Without the plugins that Cloud Services removes, as Cloud Services runs them.
-		const rawTestData = ( await readFile( new URL( 'test-data/document.html', root ), 'utf8' ) ).trimEnd();
+		const rawTestData = ( await readFile( new URL( testDataFile, root ), 'utf8' ) ).trimEnd();
 
 		// Cloud Services compares multi-root test data as a string. Thus formatted JSON fails the upload.
 		if ( isMultiRoot && JSON.stringify( JSON.parse( rawTestData ) ) !== rawTestData ) {
@@ -129,13 +130,27 @@ try {
 	await browser.close();
 }
 
-// The samples, joined into one document.
+// The samples, joined into one document. For a multi-root editor, each sample is a JSON file with the content of each
+// root, and the content of each root is joined.
 async function readSamples() {
 	const folder = new URL( 'test-data/samples/', root );
-	const files = ( await readdir( folder ) ).filter( name => name.endsWith( '.html' ) ).sort();
+	const extension = isMultiRoot ? '.json' : '.html';
+	const files = ( await readdir( folder ) ).filter( name => name.endsWith( extension ) ).sort();
 	const samples = await Promise.all( files.map( name => readFile( new URL( name, folder ), 'utf8' ) ) );
 
-	return samples.map( sample => sample.trim() ).join( '' );
+	if ( !isMultiRoot ) {
+		return samples.map( sample => sample.trim() ).join( '' );
+	}
+
+	const roots = {};
+
+	for ( const sample of samples ) {
+		for ( const [ rootName, html ] of Object.entries( JSON.parse( sample ) ) ) {
+			roots[ rootName ] = ( roots[ rootName ] ?? '' ) + html.trim();
+		}
+	}
+
+	return JSON.stringify( roots );
 }
 
 // Removes the comment and suggestion markers from the HTML, or from each root of multi-root JSON.
@@ -228,7 +243,7 @@ Notes about the script:
 - The check removes the comment and suggestion markers before it compares, because it has no data of the comments. The upload sends the test data with the markers, and Cloud Services accepts them. The `--write` mode also removes the markers, so take test data with markers from the application.
 - The license key is only for the check. Do not put it in the shared configuration. It must be a key for self-hosted installations. Cloud Services uses its own key.
 - The check stops all network requests of the page, as Cloud Services does. With Playwright 1.48 or later, it also closes WebSocket connections. A plugin that needs the network shows its error in the check.
-- For multi-root samples, use JSON files and join the roots in the same way.
+- For a multi-root editor, set `isMultiRoot` to `true`. Then each sample is a JSON file with the content of each root, for example `{"header":"<p>…</p>","content":"<p>…</p>"}`. `--write` joins the content of each root, and the test data is `test-data/document.json`.
 
 When the check fails:
 

@@ -30,7 +30,7 @@ Keep these plugins in `builtinPlugins`, so that the application and the bundle h
 
 A plugin that only registers CKEditor UI components, for example a button with `editor.ui.componentFactory.add()`, and needs nothing else, works on the server. You can keep it, so that you change less code. If you are not sure, remove it on the server, because a removed plugin that defines no data cannot change the output.
 
-Before you remove a plugin, make sure that no kept plugin requires it. Search for the plugin in the `requires` lists. If a kept plugin requires it, the result depends on `builtinPlugins`:
+Before you remove a plugin, make sure that no kept plugin requires it. Search for the plugin in the `requires` lists of the project code, but not in the lockfiles, `node_modules`, or the build output, as step 1 of `SKILL.md` does. If a kept plugin requires it, the result depends on `builtinPlugins`:
 
 - If `builtinPlugins` lists the removed plugin, Cloud Services also removes each plugin that requires it, without an error. Then a data plugin can disappear, and only the test data shows the problem.
 - If `builtinPlugins` does not list the removed plugin, for example because it lists only a glue plugin, the upload stops with the `plugincollection-required` error.
