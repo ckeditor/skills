@@ -182,7 +182,7 @@ At the end, give the user a short report with these parts:
 - Each change, with the file and the guide section (or the `@deprecated` tag) that made it necessary.
 - The guide entries that you marked "not applicable", with the reasons.
 - A statement that the feature baseline is still true, or the list of features that the user agreed to remove. If you made parts of the baseline from the code, say which parts.
-- The tasks that are left for the user. Examples are a new license key, license warnings in the console, or data format changes that affect their back end or tests. Include all tasks that the guides mention.
+- The tasks that are left for the user. Examples are a new license key, license warnings in the console, or data format changes that affect their back end or tests. Include all tasks that the guides mention. If the project uploads an editor bundle to CKEditor Cloud Services, a new bundle with a new bundle version is one of these tasks. The `ckeditor-bundle` skill can build it.
 
 ## Troubleshooting
 

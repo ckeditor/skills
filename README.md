@@ -24,6 +24,13 @@ the range, applies the breaking changes in code (not only in `package.json`),
 keeps every feature the editor had, verifies the result, and reports each change
 with the guide section that required it.
 
+The third skill, **`ckeditor-bundle`**, adds a script to an **existing** CKEditor 5
+integration that builds the editor bundle for CKEditor Cloud Services. It moves
+the editor into one module that the application and the bundle share, decides
+which custom plugins the bundle needs and which ones Cloud Services removes,
+splits the configuration into the uploaded part and the runtime part, makes the
+test data, and verifies the bundle the way Cloud Services loads it.
+
 > [!NOTE]
 > **Want a skill for something else with CKEditor?** This repo is meant to grow
 > beyond install + configure. If you'd like a skill for a specific feature,
@@ -45,12 +52,14 @@ npx skills add ckeditor/skills
 /plugin install ckeditor@ckeditor
 ```
 
-**Manual:** copy `skills/ckeditor/` (and `skills/ckeditor-update/`) into your
-agent's skills directory (e.g. `.claude/skills/ckeditor/`).
+**Manual:** copy `skills/ckeditor/` (and `skills/ckeditor-update/` and
+`skills/ckeditor-bundle/`) into your agent's skills directory (e.g.
+`.claude/skills/ckeditor/`).
 
 Once installed, the skills load automatically: `ckeditor` when you ask your
-agent to install, set up, configure, or troubleshoot CKEditor, and
-`ckeditor-update` when you ask it to update CKEditor to a newer version.
+agent to install, set up, configure, or troubleshoot CKEditor, `ckeditor-update`
+when you ask it to update CKEditor to a newer version, and `ckeditor-bundle` when
+you ask it to build the editor bundle for Cloud Services.
 
 ## What's in here
 
@@ -71,6 +80,17 @@ skills/ckeditor-update/
     ├── documentation-access.md   # update guides, migration guides, release notes, LTS policy URLs + docs request tags
     ├── guide-reader-prompt.md    # prompt for the sub-agents that read the guides
     └── skill-feedback.md         # how to report wrong/missing guidance
+skills/ckeditor-bundle/
+├── SKILL.md                      # bundle workflow: detect → plan → shared module → plugins → build → test data → bundle version → verify → report
+└── references/
+    ├── documentation-access.md   # Cloud Services guides, REST API, CKEditor 5 docs + docs request tags
+    ├── plugin-classification.md  # keep, remove on the server, split, or change each custom plugin
+    ├── configuration-split.md    # uploaded configuration vs runtime configuration
+    ├── bundle-build.md           # requirements of the bundle file, bundler choice, monorepos, CDN setups
+    ├── test-data.md              # samples and test_data
+    ├── verification.md           # the check script that loads the bundle as Cloud Services does
+    ├── troubleshooting.md        # where the guides list the upload errors, and the errors of the check
+    └── skill-feedback.md         # how to report wrong/missing guidance
 .claude-plugin/                   # Claude Code plugin + marketplace manifests
 .github/ISSUE_TEMPLATE/           # skill-feedback issue form
 scripts/                          # release process + docs request tags (rule templates, update script)
@@ -89,6 +109,9 @@ The skills work standalone, but are more effective with live docs access:
   one fetchable text bundle (no API reference); and **`llms.txt`**
   (<https://ckeditor.com/llms.txt>) — a product overview (capabilities, lineup,
   pricing) with links.
+- **Cloud Services docs:** <https://ckeditor.com/docs/cs/latest/>, with the index
+  **`llms.txt`** (<https://ckeditor.com/docs/cs/llms.txt>) of all pages, which the
+  `ckeditor-bundle` skill reads.
 - **Kapa documentation MCP** (optional): semantic search over the docs — setup in
   [`skills/ckeditor/references/documentation-access.md`](skills/ckeditor/references/documentation-access.md).
 
