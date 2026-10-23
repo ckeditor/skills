@@ -68,6 +68,7 @@ skills/ckeditor/
 skills/ckeditor-update/
 ├── SKILL.md                      # migration workflow: detect → route → walk guides → apply → verify → report
 └── references/
+    ├── custom-css-check.md       # checks that the project's custom styles still work after the update
     ├── documentation-access.md   # update guides, migration guides, release notes, LTS policy URLs + docs request tags
     ├── guide-reader-prompt.md    # prompt for the sub-agents that read the guides
     └── skill-feedback.md         # how to report wrong/missing guidance

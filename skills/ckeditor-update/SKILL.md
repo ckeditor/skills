@@ -68,7 +68,7 @@ Do not change anything in this step.
 2. Find the installation method. The current methods are npm (imports from `ckeditor5` and `ckeditor5-premium-features`), CDN, and ZIP. The legacy methods are predefined builds (`@ckeditor/ckeditor5-build-*`) and many `@ckeditor/ckeditor5-*` source packages bundled with webpack. DLL builds, Online Builder ZIPs, and the old CDN scripts for each build are legacy methods too.
 3. Find the premium packages and how the project sets the license key.
 4. Find the framework wrappers: `@ckeditor/ckeditor5-react`, `@ckeditor/ckeditor5-vue`, or `@ckeditor/ckeditor5-angular`. They have their own version numbers.
-5. Find the custom code: custom plugins, converters, and CSS that overrides `.ck-*` selectors or `--ck-*` variables.
+5. Find the custom code: custom plugins, converters, and CSS that overrides `.ck-*` selectors or `--ck-*` variables. For the CSS, write down every `--ck-*` variable that the project sets, with its selector, its value, and the file. Also write down every `--ck-*` variable that the project reads with `var()`, and every `.ck-*` selector that the project styles. Search the whole project, not only the `.css` files, because components and scripts can set styles too. This is the style inventory. Also copy the files with these styles to a temporary directory outside the project. Steps 5 and 6 use the inventory and the copy.
 6. Write down what the editor does today. This is the feature baseline. Record the features (the loaded plugins, `editor.plugins` at runtime), the toolbar, and a sample of `editor.getData()`. For a predefined build, also record the features that the build includes. In step 6, you compare the result with this baseline.
 
 If the editor does not start, for example after an earlier failed update, or if you have no browser, you cannot read the baseline at runtime. In that case, make the baseline from the editor configuration, the tests, and the last working revision in version control. In the report, say which parts of the baseline you confirmed at runtime and which parts you made from the code.
@@ -140,7 +140,7 @@ Do not apply entries without a check. Do not skip entries because they look opti
 4. Install the dependencies with the package manager of the project. Do not edit the lockfile by hand. If an old editor version stays in the dependency tree, find in the lockfile a package that still has the old version. Then find what requires that package, for example with `npm ls @ckeditor/ckeditor5-core`, `pnpm why @ckeditor/ckeditor5-core`, or `yarn why @ckeditor/ckeditor5-core`. Use the name of the package that you found, not `ckeditor5`. A legacy integration does not depend on `ckeditor5`, so `why ckeditor5` shows nothing there. Then update the dependency declaration that requires the old version, and let the package manager update the lockfile.
 5. Apply every "apply" item from the checklist. A guide can show only some of the options of a changed configuration. In that case, get the full shape of the new configuration from the `.d.ts` files of the target version (see item 7 for where to find them).
 6. Replace deprecated APIs too, even if they still work and show no warning. A deprecated API that still works is an unfinished update. It breaks when a later major version removes it.
-7. Scan the type declarations of the target version for deprecations. This scan is an extra check. It does not replace the guides. It can find a deprecation that a guide hides in a long section. It cannot find changes in CSS or in runtime behavior. For each CKEditor API that the project uses, find its declaration in the `.d.ts` files of the target version. This includes calls, constructors, methods, config keys, and imports. Check if the overload that the project uses has a `@deprecated` tag. If it does, use the replacement that its JSDoc names.
+7. Scan the type declarations of the target version for deprecations. This scan is an extra check. It does not replace the guides. It can find a deprecation that a guide hides in a long section. It cannot find changes in CSS or in runtime behavior. For changes in CSS, see item 8. For each CKEditor API that the project uses, find its declaration in the `.d.ts` files of the target version. This includes calls, constructors, methods, config keys, and imports. Check if the overload that the project uses has a `@deprecated` tag. If it does, use the replacement that its JSDoc names.
 
 	The `ckeditor5` and `ckeditor5-premium-features` packages only re-export the types. The declarations are in the `@ckeditor/ckeditor5-*` packages, for example `node_modules/@ckeditor/ckeditor5-editor-classic/dist/classiceditor.d.ts`. To list every deprecation at once, run:
 
@@ -149,14 +149,15 @@ Do not apply entries without a check. Do not skip entries because they look opti
 	```
 
 	For npm projects, the `.d.ts` files of the target are in `node_modules` after item 4. CDN and ZIP projects do not have them. For these projects, install the target version of `ckeditor5` (and `ckeditor5-premium-features`, if used) into a temporary directory outside the project, and read the `.d.ts` files there.
-8. Search the project for the old version number, but not in the lockfiles, `node_modules`, `.git`, or the build output:
+8. Check the custom styles against the editor CSS of the target. If the style inventory from step 1 is not empty, compare each variable and selector in it with the editor CSS of the old and the new version, as `references/custom-css-check.md` describes. The guides can miss a change in the CSS, and an override that stops working causes no error. A finding is only a suspicion. Before you change the project CSS, read the rule in the new CSS and make sure that the setting of the project no longer reaches it.
+9. Search the project for the old version number, but not in the lockfiles, `node_modules`, `.git`, or the build output:
 
 	```bash
 	grep -rn "<old-version>" . --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.git --exclude=package-lock.json --exclude=pnpm-lock.yaml --exclude=yarn.lock
 	```
 
 	Version numbers in the project code, such as CDN URLs in the editor configuration or version constants, are not in any guide. An old number there does not cause an error, but the editor loads old files. Update every match that refers to CKEditor.
-9. Build the project.
+10. Build the project.
 
 ### 6. Verify the result
 
@@ -168,20 +169,22 @@ Do not apply entries without a check. Do not skip entries because they look opti
 	- the console has no errors and no deprecation warnings. License warnings, for example about a trial or development license, do not block the update. Add them to the report as a task for the user,
 	- `window.CKEDITOR_VERSION` is equal to the target,
 	- the feature baseline from step 1 is still true: the same features, a full toolbar, and equal `editor.getData()` output. A plugin can have a new name or a replacement that the guides document. In that case, compare the feature, not the plugin name.
+	- the custom styles still work. Compare the computed styles of the old and the new version on a test page, as `references/custom-css-check.md` describes. Skip this check if the style inventory from step 1 is empty.
 
 	The guides can announce changes that make the result different from the baseline, for example new plugins that the editor loads by default or new attributes in the data output. These changes are expected. Do not count them as missing or broken features. If a guide names an option that hides such a change in the data, use it for the comparison. Name every expected change in the report. To check custom CSS, read the computed style. Do not rely on how the page looks.
-3. If you do not have a browser, give the user the list from item 2 and ask them to do the checks.
+3. If you do not have a browser, give the user the list from item 2 and ask them to do the checks. For the custom styles, ask them to compare the elements that the style inventory names with how they looked before the update.
 
-A green build does not prove much. Renamed CSS variables, changes in the data format, and missing features do not cause errors. The checklist and the baseline exist to find these problems.
+A green build does not prove much. Renamed CSS variables, changes in the data format, and missing features do not cause errors. The checklist finds the changes that the guides name. The baseline and the check of the custom styles also find the changes that the guides miss.
 
 ### 7. Report the result
 
 At the end, give the user a short report with these parts:
 
 - The old and the new version, and the new installation method if it changed.
-- Each change, with the file and the guide section (or the `@deprecated` tag) that made it necessary.
+- Each change, with the file and the guide section (or the `@deprecated` tag) that made it necessary. For a change in the custom styles that no guide names, give the rule in the new editor CSS instead, and name it as a gap in the guide.
 - The guide entries that you marked "not applicable", with the reasons.
 - A statement that the feature baseline is still true, or the list of features that the user agreed to remove. If you made parts of the baseline from the code, say which parts.
+- The result of the check of the custom styles: the differences that remain and why, or a statement that none remain. If you had no browser, say that only the check in step 5 item 8 ran.
 - The tasks that are left for the user. Examples are a new license key, license warnings in the console, or data format changes that affect their back end or tests. Include all tasks that the guides mention.
 
 ## Troubleshooting
@@ -190,6 +193,7 @@ Each CKEditor error has a code, for example `ckeditor-duplicated-modules`. The e
 
 ## References
 
+- `references/custom-css-check.md` describes how to check that the custom styles of the project still work after the update.
 - `references/documentation-access.md` has the URLs of the update guides, the guides about the migration to the new installation methods, the release notes, and the versioning policy.
 - `references/guide-reader-prompt.md` has the prompt for the sub-agents that read the guides and the release notes.
 - `references/skill-feedback.md` explains how to report wrong or missing guidance.
