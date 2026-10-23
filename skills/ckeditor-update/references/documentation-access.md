@@ -29,7 +29,7 @@ These guides are the main source.
 Use these guides for legacy setups.
 
 - The overview, with the deprecation timeline of each legacy method: <https://ckeditor.com/docs/ckeditor5/latest/updating/nim-migration/migration-to-new-installation-methods.html?utm_source=ckeditor-skill&utm_medium=ai-agent&utm_content=ckeditor-update>
-- One guide for each method, in the same directory: `predefined-builds.html`, `customized-builds.html`, `dll-builds.html`, `online-builder.html`, and `custom-plugins.html`. The predefined builds guide shows the plugin list and the toolbar that are equal to each old build. Start the new plugin list from it.
+- One guide for each method, in the same directory: `predefined-builds.html`, `customized-builds.html`, `dll-builds.html`, `online-builder.html`, and `custom-plugins.html`. The predefined builds guide shows a plugin list and a toolbar for each old build.
 - The tables of renamed imports, for `does not provide an export named …` errors: `migrating-imports.html` in the same directory.
 
 ## Release notes
