@@ -1,14 +1,14 @@
 ---
 name: ckeditor-bundle
 description: >-
-  Generate the script that builds the CKEditor 5 editor bundle for CKEditor
-  Cloud Services, for an existing CKEditor 5 integration in any stack. Use it
-  when the project needs an editor bundle (document storage, import and export,
-  the Server-side Editor API, connection optimization), when the editor changes
-  and the bundle must follow, or when a bundle upload fails (`CKEditorCS`,
-  `bundleVersion`, `test_data`, `POST /editors`). Do not use it to add
-  CKEditor 5 to a project, to update CKEditor 5, to write new features, or for
-  CKEditor 4.
+  Generate the scripts that build the CKEditor 5 editor bundle for CKEditor
+  Cloud Services and that upload it, for an existing CKEditor 5 integration in
+  any stack. Use it when the project needs an editor bundle (document storage,
+  import and export, the Server-side Editor API, connection optimization), when
+  the editor changes and the bundle must follow, or when a bundle upload fails
+  (`CKEditorCS`, `bundleVersion`, `test_data`, `POST /editors`). Do not use it
+  to add CKEditor 5 to a project, to update CKEditor 5, to write new features,
+  or for CKEditor 4.
 license: MIT
 allowed-tools:
   - Read
@@ -26,9 +26,9 @@ metadata:
 
 # CKEditor 5 editor bundle for Cloud Services
 
-Some CKEditor Cloud Services features run the editor of the application on the server, for example document storage and the Server-side Editor API. The "Features that require the editor bundle" table of the main guide lists them. For these features, the customer uploads an editor bundle: one file with the editor class and all its plugins, built from the same code as the editor in the browser. This skill adds a script to the project that builds this bundle. The script is deterministic, so the customer can run it again for each change and in CI.
+Some CKEditor Cloud Services features run the editor of the application on the server, for example document storage and the Server-side Editor API. The "Features that require the editor bundle" table of the main guide lists them. For these features, the customer uploads an editor bundle: one file with the editor class and all its plugins, built from the same code as the editor in the browser. This skill adds two scripts to the project: one script builds this bundle, and one script uploads it. The build is deterministic, so the customer can run it again for each change and in CI.
 
-The skill does not build a bundle by hand, and it does not upload it. It changes the project so that one command builds the bundle, and it verifies the result. The upload uses the configuration, the test data, and the bundle version that the skill prepares.
+The skill does not build a bundle by hand. It changes the project so that one command builds the bundle and one command uploads it, and it verifies the result. The upload sends the configuration, the test data, and the bundle version that the skill prepares. The skill runs an upload only with the credentials and the approval of the user.
 
 ## When to apply
 
@@ -69,6 +69,7 @@ When you finish, the project has these parts:
 4. **A bundle build** for the bundler of the project. One command, for example `npm run build:bundle`, writes one minified file that runs as a classic script and sets the `CKEditorCS` global to the editor class.
 5. **Sample documents and test data.** The samples use every feature and every custom plugin. The test data is the output of the editor for them.
 6. **A check** that loads the bundle as Cloud Services does and compares the editor output with the test data.
+7. **An upload and its scripts.** An upload script sends the signed `POST /editors` request with the parts above. Three scripts in `package.json` run the build and the upload: `build:bundle`, `upload:bundle`, and `release:bundle`.
 
 ## Core workflow
 
@@ -88,7 +89,7 @@ Do not change anything in this step.
 
 If step 1 found a bundle setup, compare its editor with the editor of the application: the editor class, the plugins, and the configuration. Then choose the route:
 
-- **The setup uses the editor of the application**, for example through a shared module. Keep the setup. Sort only the new and changed plugins, and split only the new and changed options. Then do step 4 for these plugins, and steps 6 to 9. They give new test data and a new bundle version.
+- **The setup uses the editor of the application**, for example through a shared module. Keep the setup. Sort only the new and changed plugins, and split only the new and changed options. Then do step 4 for these plugins, and steps 6 to 10. They give new test data and a new bundle version.
 - **The setup has its own copy of the editor**, for example a second plugin list or a second uploaded configuration. Tell the user about each difference, because a difference changes the documents on the server. Then do all steps, so that one shared module replaces the copy. Keep the bundler of the setup if it can build the bundle.
 - **An upload failed.** Find the cause in `references/troubleshooting.md` first. A failed upload stores nothing, so its bundle version is still free.
 
@@ -139,7 +140,16 @@ The application and the upload read the bundle version from the shared module. C
 
 A collaboration session accepts only editors with the bundle version that started it, and a session without a bundle version accepts only editors without one. Other editors get the `Incompatible bundle version` error. This also applies to the first bundle: the sessions that are open now started without a bundle version. Tell the user to plan the deployment: upload the bundle first, then deploy the application, and expect that the open sessions end or must be removed before the new editor can connect.
 
-### 8. Verify the result
+### 8. Add the upload
+
+Read `references/upload.md`. Add the upload script and the three package scripts in every result, also when the user does not ask for the upload.
+
+1. Write the upload script in the language and the module format of the shared module (step 3, item 2). It reads the shared configuration, the bundle version, and `pluginsRemovedOnServer` from the shared module, and the test data from the test data file. In a monorepo, put the script in the package of the bundle build.
+2. Send `removePlugins` with the plugins of `editorConfig.removePlugins` and of `pluginsRemovedOnServer`, as the check script of `references/verification.md` does. For a multi-root editor, send `is_multi_root_editor: true`.
+3. Read the base URL of the REST API and the API secret from environment variables. Add the local file with the credentials to `.gitignore`. The script exits with an error when the upload fails.
+4. Add the scripts to `package.json`: `build:bundle` builds the bundle, `upload:bundle` runs the upload script, and `release:bundle` runs both. Then CI can build and check the bundle on each change, without the credentials.
+
+### 9. Verify the result
 
 **Do not tell the user that the bundle is ready before you verify it.** Do not simulate typing in the editor. Read `references/verification.md`.
 
@@ -147,11 +157,11 @@ A collaboration session accepts only editors with the bundle version that starte
 2. Run the bundle build. It must write one file.
 3. Check the file: it runs as a classic script, `window.CKEditorCS` is the editor class, and `CKEditorCS.create` is a function.
 4. Run the check from `references/verification.md`: start the editor from the bundle with the shared configuration and the test data, and compare the output with the test data. They must be equal.
-5. If the user has the credentials of a Cloud Services environment and agrees, an upload with the test data is the final check. A failed upload stores nothing.
+5. Run `upload:bundle` only with the approval of the user, and first with a test environment of Cloud Services. An upload is the final check, and it stores the bundle version for good. A failed upload stores nothing.
 
 If you cannot run a step, give the user the commands and the expected results.
 
-### 9. Report the result
+### 10. Report the result
 
 At the end, give the user a short report:
 
@@ -160,6 +170,8 @@ At the end, give the user a short report:
 - The configuration split: the options in the shared configuration and in the runtime configuration.
 - The commands to build the bundle and to run the check, and their results.
 - The bundle version and the steps for the next update.
+- The environment variables of the upload, and the CI setup: the build and the check on each change, and the upload in a release job.
+- One upload for each environment that the application uses, and the `GET /editors/{bundle_version}/config` request, which shows what Cloud Services stores.
 - The tasks that are left for the user, for example the upload, the credentials in CI, and the plugins that you could not verify.
 - The project docs and the agent instruction files, for example `AGENTS.md`, that still describe the old editor setup, if you did not update them.
 
@@ -172,6 +184,8 @@ At the end, give the user a short report:
 - The data part of a plugin works without the network, without DOM elements outside the editor, and without the globals of the application.
 - The test data is the exact output of the editor: no formatting, no final new line.
 - A new bundle version for each change of the bundle or its configuration.
+- No credentials in the code, in the logs, or in the bundle. The upload script reads them from environment variables.
+- No upload without the approval of the user. An upload stores the bundle version for good.
 
 ## Troubleshooting
 
@@ -184,6 +198,7 @@ Read `references/troubleshooting.md`. It shows where the Cloud Services guides l
 - `references/configuration-split.md` explains which options go in the shared configuration.
 - `references/bundle-build.md` has the requirements of the bundle and the setup for each kind of project.
 - `references/test-data.md` explains how to make the samples and the test data.
+- `references/upload.md` has the upload script, the package scripts, and the CI setup.
 - `references/verification.md` has the check of the bundle.
 - `references/troubleshooting.md` explains how to find the cause of an upload error, and has the errors of the check.
 - `references/skill-feedback.md` explains how to report wrong or missing guidance.

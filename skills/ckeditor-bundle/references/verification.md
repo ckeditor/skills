@@ -282,4 +282,4 @@ Do this on a development setup. `setData()` starts the save logic of the applica
 - The plugins that Cloud Services removes because they require a removed plugin. Cloud Services removes them without an error, but the check stops with `plugincollection-required` (see `plugin-classification.md`).
 - A plugin that changes the content only when the editor loads it, for example a post-fixer that changes straight quotes to typographic quotes. The test data already has the result, so the check and the upload pass also without the plugin. To find this problem, load the samples in the bundle, and compare the output with the test data from the application.
 
-The upload is the final check. If the user has the credentials of a Cloud Services environment, offer an upload with the test data. A failed upload stores nothing, and a successful upload stores the bundle version for good.
+The upload is the final check. Offer an upload with the test data when the user has the credentials of a Cloud Services environment. A failed upload stores nothing, and a successful upload stores the bundle version for good. Read `upload.md` for the upload script and for the rules of an upload.

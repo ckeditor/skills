@@ -18,12 +18,13 @@ the range, applies the breaking changes in code (not only in `package.json`),
 keeps every feature the editor had, verifies the result, and reports each change
 with the guide section that required it.
 
-The third skill, **`ckeditor-bundle`**, adds a script to an **existing** CKEditor 5
-integration that builds the editor bundle for CKEditor Cloud Services. It moves
-the editor into one module that the application and the bundle share, decides
-which custom plugins the bundle needs and which ones Cloud Services removes,
-splits the configuration into the uploaded part and the runtime part, makes the
-test data, and verifies the bundle the way Cloud Services loads it.
+The third skill, **`ckeditor-bundle`**, adds the scripts that build the editor
+bundle for CKEditor Cloud Services and upload it, to an **existing** CKEditor 5
+integration. It moves the editor into one module that the application and the
+bundle share, decides which custom plugins the bundle needs and which ones Cloud
+Services removes, splits the configuration into the uploaded part and the
+runtime part, makes the test data, verifies the bundle the way Cloud Services
+loads it, and adds the signed upload request as a script that CI can run.
 
 > [!NOTE]
 > **Want a skill for something else with CKEditor?** This repo is meant to grow
@@ -53,7 +54,7 @@ npx skills add ckeditor/skills
 Once installed, the skills load automatically: `ckeditor` when you ask your
 agent to install, set up, configure, or troubleshoot CKEditor, `ckeditor-update`
 when you ask it to update CKEditor to a newer version, and `ckeditor-bundle` when
-you ask it to build the editor bundle for Cloud Services.
+you ask it to build or upload the editor bundle for Cloud Services.
 
 ## What's in here
 
@@ -75,13 +76,14 @@ skills/ckeditor-update/
     ├── guide-reader-prompt.md    # prompt for the sub-agents that read the guides
     └── skill-feedback.md         # how to report wrong/missing guidance
 skills/ckeditor-bundle/
-├── SKILL.md                      # bundle workflow: detect → plan → shared module → plugins → build → test data → bundle version → verify → report
+├── SKILL.md                      # bundle workflow: detect → plan → shared module → plugins → build → test data → bundle version → upload → verify → report
 └── references/
     ├── documentation-access.md   # Cloud Services guides, REST API, CKEditor 5 docs + docs request tags
     ├── plugin-classification.md  # keep, remove on the server, split, or change each custom plugin
     ├── configuration-split.md    # uploaded configuration vs runtime configuration
     ├── bundle-build.md           # requirements of the bundle file, bundler choice, monorepos, CDN setups
     ├── test-data.md              # samples and test_data
+    ├── upload.md                 # the signed POST /editors request, the package scripts, and CI
     ├── verification.md           # the check script that loads the bundle as Cloud Services does
     ├── troubleshooting.md        # where the guides list the upload errors, and the errors of the check
     └── skill-feedback.md         # how to report wrong/missing guidance
