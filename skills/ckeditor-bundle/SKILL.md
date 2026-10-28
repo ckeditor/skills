@@ -129,12 +129,7 @@ The application and the upload read the bundle version from the shared module. A
 
 ### 8. Add the upload
 
-Read `references/upload.md`. Add the upload script and the three package scripts in every result, also when the user does not ask for the upload.
-
-1. Write the upload script in the language and the module format of the shared module (step 3, item 2). It reads the shared configuration, the bundle version, and `pluginsRemovedOnServer` from the shared module, and the test data from the test data file. In a monorepo, put the script in the package of the bundle build.
-2. Send `removePlugins` with the plugins of `editorConfig.removePlugins` and of `pluginsRemovedOnServer`, as the check script of `references/verification.md` does. For a multi-root editor, send `is_multi_root_editor: true`.
-3. Read the base URL of the REST API and the API secret from environment variables. Add the local file with the credentials to `.gitignore`. The script exits with an error when the upload fails.
-4. Add the scripts to `package.json`: `build:bundle` builds the bundle, `upload:bundle` runs the upload script, and `release:bundle` runs both. Then CI can build and check the bundle on each change, without the credentials.
+Add the upload script and the three package scripts, as `references/upload.md` describes. Add them in every result, also when the user does not ask for the upload.
 
 ### 9. Verify the result
 
