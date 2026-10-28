@@ -45,6 +45,7 @@ Do this on a development setup. `setData()` starts the application's save logic,
 ## What the check does not test
 
 - The second editor that Cloud Services builds from the operations of the first one. In rare cases, a problem shows only in the upload.
+- Options that change only the model, for example other model names in the heading options. The output stays the same, but the collaboration sessions use the model. Keep all content options in the shared configuration.
 - A plugin that changes the content only when the editor loads it, for example a post-fixer that changes straight quotes to typographic quotes. The test data already has the result, so the check and the upload pass also without the plugin. To find this problem, load the samples in the bundle, and compare the output with the test data from the application.
 
 The upload is the final check. If the user has the credentials of a Cloud Services environment, offer an upload with the test data. A failed upload stores nothing, and a successful upload stores the bundle version for good.
