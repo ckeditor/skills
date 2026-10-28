@@ -4,6 +4,12 @@ Official **[Agent Skills](https://agentskills.io/home)** for working
 with CKEditor, designed to be portable across AI coding agents (Claude Code,
 Cursor, Codex, and any tool that supports the open skill format).
 
+> [!TIP]
+> **New to CKEditor skills?** Start with the
+> [Using CKEditor 5 with AI coding agents](https://ckeditor.com/docs/ckeditor5/latest/getting-started/ai-coding-agents.html)
+> guide. It explains what the skills do, which agents are supported, how to
+> install them, and how to connect your agent to the live documentation.
+
 The first skill, **`ckeditor`**, takes a developer and their coding agent from
 "I want a rich-text editor" to a **working, configured, correctly-licensed
 CKEditor 5** — picking an install method, wiring the editor (vanilla or a
