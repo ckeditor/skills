@@ -4,6 +4,12 @@ Official **[Agent Skills](https://agentskills.io/home)** for working
 with CKEditor, designed to be portable across AI coding agents (Claude Code,
 Cursor, Codex, and any tool that supports the open skill format).
 
+> [!TIP]
+> **New to CKEditor skills?** Start with the
+> [Using CKEditor 5 with AI coding agents](https://ckeditor.com/docs/ckeditor5/latest/getting-started/ai-coding-agents.html)
+> guide. It explains what the skills do, which agents are supported, how to
+> install them, and how to connect your agent to the live documentation.
+
 The first skill, **`ckeditor`**, takes a developer and their coding agent from
 "I want a rich-text editor" to a **working, configured, correctly-licensed
 CKEditor 5** — picking an install method, wiring the editor (vanilla or a
@@ -77,16 +83,18 @@ skills/ckeditor-update/
     └── skill-feedback.md         # how to report wrong/missing guidance
 skills/ckeditor-bundle/
 ├── SKILL.md                      # bundle workflow: detect → plan → shared module → plugins → build → test data → bundle version → upload → verify → report
-└── references/
-    ├── documentation-access.md   # Cloud Services guides, REST API, CKEditor 5 docs + docs request tags
-    ├── plugin-classification.md  # keep, remove on the server, split, or change each custom plugin
-    ├── configuration-split.md    # uploaded configuration vs runtime configuration
-    ├── bundle-build.md           # requirements of the bundle file, bundler choice, monorepos, CDN setups
-    ├── test-data.md              # samples and test_data
-    ├── upload.md                 # the signed POST /editors request, the package scripts, and CI
-    ├── verification.md           # the check script that loads the bundle as Cloud Services does
-    ├── troubleshooting.md        # where the guides list the upload errors, and the errors of the check
-    └── skill-feedback.md         # how to report wrong/missing guidance
+├── references/
+│   ├── documentation-access.md   # Cloud Services guides, REST API, CKEditor 5 docs + docs request tags
+│   ├── plugin-classification.md  # keep, remove on the server, split, or change each custom plugin
+│   ├── configuration-split.md    # uploaded configuration vs runtime configuration
+│   ├── bundle-build.md           # requirements of the bundle file, bundler choice, monorepos, CDN setups
+│   ├── test-data.md              # samples and test_data
+│   ├── upload.md                 # the signed POST /editors request, the package scripts, and CI
+│   ├── verification.md           # verification order, how to use the check script, what the check does not test
+│   ├── troubleshooting.md        # where the guides list the upload errors, and the errors of the check
+│   └── skill-feedback.md         # how to report wrong/missing guidance
+└── scripts/
+    └── check-bundle.mjs          # the check script that loads the bundle as Cloud Services does
 .claude-plugin/                   # Claude Code plugin + marketplace manifests
 .github/ISSUE_TEMPLATE/           # skill-feedback issue form
 scripts/                          # release process + docs request tags (rule templates, update script)

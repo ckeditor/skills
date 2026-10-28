@@ -2,7 +2,7 @@
 
 Cloud Services checks the bundle with the test data of the upload, and the comparison is exact. Read these sections of the test data guide of Cloud Services first (see `documentation-access.md`): "How the check works", "What to put in the test data", "Changes that the editor makes", and "Multi-root editors". This file has the steps for the project.
 
-The test data must be the exact output of the editor. Test data that you write by hand almost always fails.
+The test data must be the exact editor output. Test data that you write by hand almost always fails.
 
 ## Make the samples
 
@@ -17,7 +17,7 @@ If the editor has comments or track changes, take content with comment and sugge
 
 ## Make the test data
 
-1. Load each sample in the editor of the application, with its full runtime configuration. Then a content option that you left in the runtime configuration by mistake shows in the check of `verification.md`. Read "Take the output from the application" in `verification.md` for the ways to do this. If the editor of the application cannot start without a server, for example with real-time collaboration, use the `--write` mode of the check script, and read the runtime configuration again for options that change the content.
+1. Load each sample in the application's editor, with its full runtime configuration. Then a content option that you left in the runtime configuration by mistake shows in the check of `verification.md`. Read "Take the output from the application" in `verification.md` for the ways to do this. If the application's editor cannot start without a server, for example with real-time collaboration, use the `--write` mode of the check script, and read the runtime configuration again for options that change the content.
 2. Take the output with `getData( { trim: 'none' } )`, the same call that Cloud Services uses.
 3. Compare the output with the sample. Make sure that each change is correct, with the "Changes that the editor makes" section of the test data guide. If a change loses content, fix the plugin or the configuration, and do this step again.
 4. Join the samples into one document, load it in the editor, and save its output as the test data, for example in `test-data/document.html`. Do not format the file. If the project has a code formatter, for example Prettier, add the test data folder to its ignore list. The upload must send the content without the final new line that code editors add.

@@ -1,10 +1,10 @@
 # Sorting the custom plugins
 
-Cloud Services runs the bundle in a browser on the server. Nobody uses the editor UI there, the uploaded configuration has no DOM elements, and Cloud Services blocks the network requests of the editor during document conversions. The application is not there either, so its globals and its server do not exist.
+Cloud Services runs the bundle in a browser on the server. Nobody uses the editor UI there, the uploaded configuration has no DOM elements, and Cloud Services blocks the editor's network requests during document conversions. The application is not there either, so its globals and its server do not exist.
 
 A custom plugin is every plugin that does not come from `ckeditor5` or `ckeditor5-premium-features`. This includes the plugins of other npm packages. Read all the code of each custom plugin, also the classes that it requires and the modules that it imports. Then put it in one of the four classes below.
 
-Decide from the code, not from the name of the plugin. A plugin with "UI" in its name can register a converter, and a plugin with "Editing" in its name can send requests.
+Decide from the code, not from the plugin's name. A plugin with "UI" in its name can register a converter, and a plugin with "Editing" in its name can send requests.
 
 ## 1. Data plugins: keep them in the bundle
 
@@ -26,7 +26,7 @@ A plugin serves only the browser when removing it does not change the data. It h
 - DOM elements outside the editor, for example an element from the configuration or from `document.querySelector()`.
 - The globals of the application, browser storage, or configuration options that exist only in the runtime configuration.
 
-Keep these plugins in `builtinPlugins`, so that the application and the bundle have the same class. Add their names to the list of plugins that Cloud Services must not run, in the shared module. The upload sends this list as `removePlugins`.
+Keep these plugins in `builtinPlugins`, so that the application and the bundle have the same class. Add their names to the list of plugins that Cloud Services must not run, in the shared module. The upload sends this list as `removePlugins`. Cloud Services removes some official plugins itself, for example the real-time collaboration plugins and `Autosave`, so they do not go in this list.
 
 A plugin that only registers CKEditor UI components, for example a button with `editor.ui.componentFactory.add()`, and needs nothing else, works on the server. You can keep it, so that you change less code. If you are not sure, remove it on the server, because a removed plugin that defines no data cannot change the output.
 
@@ -37,7 +37,7 @@ Before you remove a plugin, make sure that no kept plugin requires it. Search fo
 
 The Server-side Editor API does not use the `removePlugins` option of the upload. Its scripts run every plugin of the bundle, unless the request lists them in `plugins_to_remove`. The editor scripts guide of Cloud Services describes this parameter (see `documentation-access.md`). Thus make each browser-only plugin do nothing when its runtime options are not there, and tell the user about `plugins_to_remove`.
 
-If the UI part imports a UI library, for example React, or large assets, you can keep it out of the bundle. Then the application adds it with the `extraPlugins` option of the runtime configuration, and the shared class does not list it. Explain this choice in the report, because the bundle then differs from the editor of the application.
+If the UI part imports a UI library, for example React, or large assets, you can keep it out of the bundle. Then the application adds it with the `extraPlugins` option of the runtime configuration, and the shared class does not list it. Explain this choice in the report, because the bundle then differs from the application's editor.
 
 ## 3. Plugins that do both: split them
 
@@ -48,7 +48,7 @@ One plugin can define data and also have a part that needs the browser: requests
 
 List both parts in `builtinPlugins`, and add the UI part to the list of plugins that Cloud Services must not run. Do not list a glue plugin that requires both parts, because it would require a removed plugin. If the application or other code uses the glue plugin, change it to use the two parts. The inline widget tutorial of the CKEditor 5 docs shows this split (see `documentation-access.md`).
 
-Keep the public API of the plugin: the command names, the configuration options, and the names that other code uses. Do not change the data format.
+Keep the plugin's public API: the command names, the configuration options, and the names that other code uses. Do not change the data format.
 
 If the only other part of the plugin registers CKEditor UI components and needs nothing from the list above, the plugin works on the server as it is. Do not split it. Put it in class 1.
 
@@ -61,7 +61,7 @@ The data part of a plugin can need something that does not exist on the server. 
 - Network requests, for example a converter that loads data for an element.
 - Browser storage, cookies, or timers that change the content later.
 - Configuration options that exist only in the runtime configuration, such as callbacks or DOM elements.
-- Dates, numbers, or text that depend on the locale or the time zone of the computer, for example `Intl.DateTimeFormat` without a fixed `timeZone`. The server can have another locale and time zone, and then it writes other content.
+- Dates, numbers, or text that depend on the computer's locale or time zone, for example `Intl.DateTimeFormat` without a fixed `timeZone`. The server can have another locale and time zone, and then it writes other content.
 
 Change the data part so that it works without them:
 
@@ -76,11 +76,7 @@ If you cannot change the plugin without a change of its data format, stop and as
 
 Cloud Services removes plugins by their `pluginName`. Give each custom plugin a static `pluginName` with a fixed string. Do not take the name from the class name, because the bundler can rename classes when it minifies the code.
 
-Make sure that no official plugin has the same name, also in `ckeditor5-premium-features`. For example, the official footnotes feature has the plugins `Footnotes`, `FootnotesEditing`, and `FootnotesUI`. `removePlugins` removes every plugin with the name, and an editor cannot load two plugins with the same name. If a custom plugin has the name of an official plugin, tell the user. A new name changes the code of the application, so do not rename it without approval.
-
-## The official plugins
-
-Cloud Services removes some official plugins itself, for example the real-time collaboration plugins and `Autosave`. You do not need to add them to the list. The `GET /editors/{bundle_version}/config` request shows the full list for an uploaded bundle (see `documentation-access.md`). The list depends on the version of Cloud Services.
+Make sure that no official plugin has the same name, also in `ckeditor5-premium-features`, for example `Footnotes`. An editor cannot load two plugins with the same name, and `removePlugins` removes every plugin with the name. If a custom plugin has the name of an official plugin, tell the user. Rename it only with approval, because a new name changes the application's code.
 
 ## Confirm each decision
 

@@ -28,7 +28,7 @@ Keep these values in the application:
 - Classes, for example plugin classes in `extraPlugins` or in `comments.editorConfig.extraPlugins`.
 - Credentials and URLs of the environment, for example `licenseKey`, `cloudServices.tokenUrl`, `cloudServices.webSocketUrl`, and the token URLs of other services. When the uploaded configuration has no license key, Cloud Services uses its own key for the bundle.
 - Values of one session or one document, for example `collaboration.channelId` and the initial data.
-- For a multi-root editor, the root elements and the initial data of each root, for example `roots.<rootName>.element` and `roots.<rootName>.initialData`. The root attributes are content, so they go in the shared configuration (see above).
+- For a multi-root editor, the root elements and the initial data of each root, for example `roots.<rootName>.element` and `roots.<rootName>.initialData`.
 
 ## Content options that need a function
 
@@ -41,6 +41,4 @@ Some options change the content and contain a function, for example an automatic
 
 ## Check the split
 
-- Run `JSON.parse( JSON.stringify( sharedConfig ) )` and compare it with the shared configuration. The two must be equal, except for the regular expressions of `htmlSupport`.
-- The shared module loads in Node.js without errors.
-- The application gives the editor the shared configuration with the runtime configuration, and the editor works as before.
+Run `JSON.parse( JSON.stringify( sharedConfig ) )`, and compare the result with the shared configuration. The two must be equal, except for the regular expressions of `htmlSupport`. `verification.md` has the other checks.
