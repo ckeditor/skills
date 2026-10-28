@@ -10,8 +10,9 @@ import upath from 'upath';
 import { afterAll, describe, expect, it } from 'vitest';
 import { ROOT_DIRECTORY, SKILLS_DIRECTORY } from '../../scripts/constants.js';
 
-// The skills contain JavaScript code that agents copy into projects, for example the check script of the
-// `ckeditor-bundle` skill. No other job runs this code, so this test makes sure that each `js` block has valid syntax.
+// The skills contain JavaScript code that agents copy into projects, for example the entry file of the bundle build
+// in the `ckeditor-bundle` skill. No other job runs this code, so this test makes sure that each `js` block has valid
+// syntax. The script files of the skills have their own test, `scripts.js`.
 
 // A `js` block, also an indented one in a list. The closing fence has the same indentation as the opening fence.
 const JS_BLOCK_PATTERN = /^([ \t]*)```js\n([\s\S]*?)^\1```$/gm;

@@ -82,15 +82,17 @@ skills/ckeditor-update/
     └── skill-feedback.md         # how to report wrong/missing guidance
 skills/ckeditor-bundle/
 ├── SKILL.md                      # bundle workflow: detect → plan → shared module → plugins → build → test data → bundle version → verify → report
-└── references/
-    ├── documentation-access.md   # Cloud Services guides, REST API, CKEditor 5 docs + docs request tags
-    ├── plugin-classification.md  # keep, remove on the server, split, or change each custom plugin
-    ├── configuration-split.md    # uploaded configuration vs runtime configuration
-    ├── bundle-build.md           # requirements of the bundle file, bundler choice, monorepos, CDN setups
-    ├── test-data.md              # samples and test_data
-    ├── verification.md           # the check script that loads the bundle as Cloud Services does
-    ├── troubleshooting.md        # where the guides list the upload errors, and the errors of the check
-    └── skill-feedback.md         # how to report wrong/missing guidance
+├── references/
+│   ├── documentation-access.md   # Cloud Services guides, REST API, CKEditor 5 docs + docs request tags
+│   ├── plugin-classification.md  # keep, remove on the server, split, or change each custom plugin
+│   ├── configuration-split.md    # uploaded configuration vs runtime configuration
+│   ├── bundle-build.md           # requirements of the bundle file, bundler choice, monorepos, CDN setups
+│   ├── test-data.md              # samples and test_data
+│   ├── verification.md           # verification order, how to use the check script, what the check does not test
+│   ├── troubleshooting.md        # where the guides list the upload errors, and the errors of the check
+│   └── skill-feedback.md         # how to report wrong/missing guidance
+└── scripts/
+    └── check-bundle.mjs          # the check script that loads the bundle as Cloud Services does
 .claude-plugin/                   # Claude Code plugin + marketplace manifests
 .github/ISSUE_TEMPLATE/           # skill-feedback issue form
 scripts/                          # release process + docs request tags (rule templates, update script)
