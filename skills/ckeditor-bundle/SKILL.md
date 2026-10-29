@@ -145,8 +145,7 @@ At the end, give the user a short report:
 - The commands to build the bundle and to run the check, and their results.
 - The bundle version and the steps for the next update.
 - The environment variables of the upload, and the CI setup: the build and the check on each change, and the upload in a release job.
-- One upload for each environment that the application uses, and the `GET /editors/{bundle_version}/config` request, which shows what Cloud Services stores.
-- The tasks that are left for the user, for example the upload, the credentials in CI, and the plugins that you could not verify.
+- The tasks that are left for the user, for example the upload to each environment that the application uses, the credentials in CI, and the plugins that you could not verify. After an upload, `GET /editors/{bundle_version}/config` shows what Cloud Services stores.
 - The project docs and the agent instruction files, for example `AGENTS.md`, that still describe the old editor setup, if you did not update them.
 
 ## Critical rules

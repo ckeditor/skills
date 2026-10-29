@@ -47,7 +47,7 @@ Give the user these steps for CI:
 2. Run `release:bundle` in a release job. Give the job the environment variables with the credentials, from the secrets of the CI system. The check in this job needs the browser of Playwright, and the `CKEDITOR_CHECK_LICENSE_KEY` license key if the editor has premium features.
 3. Upload the bundle to each environment that the application uses, for example the test environment and the production environment. Each environment stores its own bundles.
 4. Raise the bundle version for each change of the bundle or its configuration. A second upload of the same version fails with HTTP 409.
-5. Upload the bundle before the application's deployment, as step 7 of the workflow describes.
+5. Upload the bundle before the application's deployment, as the "Updating the editor bundle" section of the main editor bundle guide describes.
 
 ## Before an upload
 
