@@ -34,7 +34,9 @@ The selector is above the match. The editor CSS can use native CSS nesting. Then
 
 - In the `theme/` source files, a rule can read a variable through a PostCSS mixin. When a match is inside a `@define-mixin <name>` block, also search for `@mixin <name>`.
 
-For each version, list the rules that read the variable: the selector and the property. When a match only sets another `--ck-*` variable, for example in a `:root` block, follow that variable until you reach a property, and list the end of the chain. The chain can be longer or shorter in the new version. Compare only the ends.
+For each version, list the rules that read the variable: the selector and the property. When a match only sets another `--ck-*` variable in a `:root` or `:host` block, follow that variable until you reach a property, and list the end of the chain. The chain can be longer or shorter in the new version. Compare only the ends. A match in a narrower block, for example a block for one mode of the editor, applies only to the elements of that block. Do not follow it for the other elements.
+
+Compare the lists rule by rule, also when the new CSS still sets or reads the variable. For example, the old CSS has `.ck.ck-button:focus { border: var(--ck-a) }`. The new CSS has `.ck.ck-button:focus { border-color: var(--ck-b) }` and reads `--ck-a` only in other rules. `--ck-a` still exists, but it no longer changes the focused button.
 
 These differences are suspicious:
 

@@ -157,7 +157,7 @@ Do not apply entries without a check. Do not skip entries because they look opti
 	```
 
 	For npm projects, the `.d.ts` files of the target are in `node_modules` after item 4. CDN and ZIP projects do not have them. For these projects, install the target version of `ckeditor5` (and `ckeditor5-premium-features`, if used) into a temporary directory outside the project, and read the `.d.ts` files there.
-8. Check the custom styles against the editor CSS of the target. If the style inventory from step 1 is not empty, compare each variable and selector in it with the editor CSS of the old and the new version, as `references/custom-css-check.md` describes. The guides can miss a change in the CSS, and an override that stops working causes no error. A finding is only a suspicion. Before you change the project CSS, read the rule in the new CSS and make sure that the setting of the project no longer reaches it.
+8. Check the custom styles against the editor CSS of the target. The guides can miss a change in the CSS, and an override that stops working causes no error. If the style inventory from step 1 is not empty, do the check in `references/custom-css-check.md`. For each variable that the project sets, list the rules that read it in the old CSS and in the new CSS, and compare the two lists rule by rule. Do not stop when the new CSS still sets or reads the variable. The new CSS can read it in other rules, and then the elements of the old rules no longer follow the setting of the project. A finding is only a suspicion. Before you change the project CSS, read the rule in the new CSS and make sure that the setting of the project no longer reaches it.
 9. Search the project for the old version number, but not in the lockfiles, `node_modules`, `.git`, or the build output:
 
 	```bash
@@ -192,7 +192,7 @@ At the end, give the user a short report with these parts:
 - Each change, with the file and the guide section (or the `@deprecated` tag) that made it necessary. For a change in the custom styles that no guide names, give the rule in the new editor CSS instead, and name it as a gap in the guide.
 - The guide entries that you marked "not applicable", with the reasons.
 - A statement that the feature baseline is still true, or the list of features that the user agreed to remove or that you could not restore. If you made parts of the baseline from the code, say which parts and why.
-- The result of the check of the custom styles: the differences that remain and why, or a statement that none remain. If you had no browser, say that only the check in step 5 item 8 ran.
+- The result of the check of the custom styles. For each variable, give the number of rules that read it in the old and in the new CSS. Then give the differences that remain and why, or say that none remain. If you had no browser, say that only the check in step 5 item 8 ran.
 - The tasks that are left for the user. Examples are a new license key, license warnings in the console, or data format changes that affect their back end or tests. Include all tasks that the guides mention.
 
 ## Troubleshooting
