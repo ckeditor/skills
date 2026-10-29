@@ -15,6 +15,13 @@
       "skills": [
         "ckeditor-update"
       ]
+    },
+    {
+      "title": "cloud-services",
+      "description": "Build the editor bundle that CKEditor Cloud Services needs, from an existing CKEditor 5 integration.",
+      "skills": [
+        "ckeditor-bundle"
+      ]
     }
   ]
 }

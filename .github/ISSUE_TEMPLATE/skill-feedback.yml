@@ -17,6 +17,7 @@ body:
       options:
         - ckeditor
         - ckeditor-update
+        - ckeditor-bundle
     validations:
       required: true
   - type: dropdown
@@ -47,6 +48,13 @@ body:
     attributes:
       label: Framework & version
       placeholder: "e.g. Next.js 15 (App Router) / vanilla / React 19 / Angular 18"
+    validations:
+      required: false
+  - type: input
+    id: bundler
+    attributes:
+      label: Bundler
+      placeholder: "e.g. Vite 7 / webpack 5 / none (CDN)"
     validations:
       required: false
   - type: dropdown
