@@ -38,9 +38,10 @@ error.
 
 **Do NOT apply** for: authoring custom CKEditor plugins or features; upgrading
 the editor between versions or fixing breaking changes (hand off to the
-`ckeditor-update` skill); migrating from another editor; or **CKEditor 4** (a
-different, end-of-life product). These are out of scope — say so and stop, or
-hand off.
+`ckeditor-update` skill); building the editor bundle for CKEditor Cloud Services
+(hand off to the `ckeditor-bundle` skill); migrating from another editor; or
+**CKEditor 4** (a different, end-of-life product). These are out of scope — say
+so and stop, or hand off.
 
 ## Work from the live docs, not memory
 

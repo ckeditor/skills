@@ -108,6 +108,9 @@ docs; don't fork the bundled CSS.
   document state is synchronized and stored through CKEditor Cloud Services / the
   collaboration server, so you don't read `getData()` on submit the usual way —
   follow the collaboration feature's own data/persistence model instead.
+  Document storage and the other Cloud Services features that run the editor on
+  the server also need an **editor bundle** — hand that task to the
+  `ckeditor-bundle` skill.
 
 ## Internationalization (i18n)
 
