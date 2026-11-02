@@ -23,7 +23,6 @@ For example, the old CSS has `.ck.ck-button:focus { border: var(--ck-a) }`. The 
 Also check these:
 
 - The new CSS sets the variable on a selector that is closer to the element than the selector of the project, for example on a `.ck-*` class when the project sets it on `:root`. Then the value of the editor wins.
-- For each `--ck-*` variable that the project reads, the new CSS still sets it. A variable that nothing sets gives an empty value without an error.
 - For each `.ck-*` selector in the style inventory, its classes are still in the new CSS. A missing class is only a hint, because a script can add a class that the CSS does not use. In step 6, look for the class in the DOM of the running editor.
 
 ## Compare the computed styles on a test page
@@ -33,7 +32,7 @@ This check needs no license key and no running editor. Make a plain HTML page in
 - Load the editor CSS and the project CSS in the same order as the app. For a predefined build or a DLL build, load its `build/*.js` file with a `<script>` element. The script adds its CSS to the page. Copy rules that are not in a plain stylesheet, for example Sass, Less, CSS modules, Vue scoped styles, Angular component styles, or CSS-in-JS, into a `<style>` element as plain CSS.
 - Put the elements inside the same parent elements that the selectors of the project use.
 - Turn off transitions and animations, so that you do not read a color in the middle of an animation.
-- Add elements with the classes of the editor: the editing area, a button, an input, a toolbar, a balloon panel, and a `.ck-content` block with a paragraph, a block quote, a code block, and a table. Also add one element for each selector in the style inventory, and the element of each rule in the lists from step 5 item 8.
+- Add elements with the classes of the editor: the editing area, a button, an input, a toolbar, a balloon panel, and a `.ck-content` block with a paragraph, a block quote, a code block, and a table. Also add one element for each selector in the style inventory, and the element of each line in the check file from step 5 item 8.
 - Give the elements the states that the project styles or that the selectors of those rules name, for example the `ck-focused`, `ck-on`, and `ck-disabled` classes, `:focus`, or the sticky state of a toolbar. For `:focus`, focus the element in a script, check that it matches `:focus`, and then read only that element.
 
 Read every longhand property of each element with `getComputedStyle()`, except the custom properties (`--*`). A value that only follows the size of the element or of its parent is not a finding, for example `width`, `inline-size`, `transform-origin`, or an `auto` margin. A shorthand such as `border` gives an empty string when its parts are different. Save each run to a file, and compare the files with a script.
