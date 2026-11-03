@@ -21,7 +21,7 @@ allowed-tools:
   - Agent
 metadata:
   author: CKEditor (CKSource)
-  version: 0.2.0
+  version: 0.3.0
 ---
 
 # CKEditor 5 editor bundle for Cloud Services
